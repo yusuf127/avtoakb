@@ -3,1283 +3,1487 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HYBRID DOCTOR — Диагностика и ремонт гибридных автомобилей в Бишкеке</title>
+  <title>АВТО АКБ — Аккумуляторы для автомобиля с доставкой в Бишкеке</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=PT+Mono&family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
         extend: {
           fontFamily: {
-            sans: ['"Roboto"', 'system-ui', '-apple-system', 'sans-serif'],
-            mono: ['"PT Mono"', 'monospace'],
+            sans: ['"Golos Text"', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
           },
           colors: {
-            paper: '#F5F5F3',
-            card: '#FFFFFF',
-            borderline: '#D6D5D0',
-            graphite: '#1D2025',
-            workshop: {
-              DEFAULT: '#E05A1B',
-              dark: '#C44B12',
-              light: '#FDF3EE',
-            }
+            cobalt: {
+              50: '#EEF4FC',
+              100: '#D6E4F8',
+              600: '#0047AB',
+              700: '#003685',
+              800: '#002863',
+            },
+            asphalt: '#121417',
+            surface: '#F4F5F7',
+            borderline: '#DCE0E6',
           }
         }
       }
     }
   </script>
   <style>
-    html {
-      scroll-behavior: smooth;
-    }
+    html { scroll-behavior: smooth; }
     body {
-      background-color: #F5F5F3;
-      color: #1D2025;
-      font-family: 'Roboto', system-ui, -apple-system, sans-serif;
+      background-color: #F4F5F7;
+      color: #121417;
+      font-feature-settings: "cv02", "cv03", "cv04";
     }
-    .tabular-nums {
-      font-variant-numeric: tabular-nums;
-    }
-    /* Тонкая чертёжная сетка для технической схемы автомобиля */
-    .blueprint-grid {
-      background-color: #FAF9F6;
-      background-image:
-        linear-gradient(to right, #EAE8E1 1px, transparent 1px),
-        linear-gradient(to bottom, #EAE8E1 1px, transparent 1px);
-      background-size: 20px 20px;
-    }
+    .tabular-nums { font-variant-numeric: tabular-nums; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
-<body class="antialiased pb-16 md:pb-0 selection:bg-[#FDF3EE] selection:text-[#E05A1B]">
+<body class="antialiased pb-16 md:pb-0 selection:bg-amber-300 selection:text-asphalt">
 
-  <!-- Всплывающее уведомление при копировании текста заявки (без системных окон) -->
-  <div id="copy-notice" role="status" aria-live="polite"
-       class="fixed top-16 right-4 z-50 hidden max-w-sm bg-[#1D2025] text-white border border-[#3B404A] rounded px-4 py-3 shadow-md text-xs sm:text-sm">
-    <div id="copy-notice-title" class="font-bold text-[#E05A1B]">Текст заявки скопирован</div>
-    <div id="copy-notice-text" class="text-gray-200 mt-0.5">Вставьте его в открывшемся чате Telegram и нажмите «Отправить».</div>
-  </div>
-
-  <!-- Верхняя служебная полоса с режимом работы -->
-  <div class="bg-[#1D2025] text-gray-300 text-xs border-b border-[#2E323B]">
-    <div class="max-w-6xl mx-auto px-4 py-2 flex flex-wrap items-center justify-between gap-2">
+  <!-- Верхняя служебная панель -->
+  <div class="bg-[#121417] text-gray-300 text-xs border-b border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 py-2 flex flex-wrap items-center justify-between gap-2">
       <div class="flex flex-wrap items-center gap-x-4 gap-y-1">
-        <span class="text-white font-medium">г. Бишкек • Специализированная мастерская</span>
+        <span class="text-white font-medium">г. Бишкек • Доставка от 45 минут</span>
         <span class="text-gray-600 hidden sm:inline">|</span>
-        <span>Режим работы: <strong class="font-mono text-white font-normal">Пн–Сб: 09:00 – 19:00</strong></span>
+        <span>График работы: <strong class="text-amber-400 font-semibold font-mono">09:00 – 18:00</strong> (ежедневно)</span>
       </div>
-      <nav class="hidden md:flex items-center gap-5 text-xs text-gray-300">
-        <a href="#schematic-section" class="hover:text-white transition">Узлы гибрида</a>
-        <a href="#works" class="hover:text-white transition">Основные работы</a>
-        <a href="#dashboard-signs" class="hover:text-white transition">Значки на панели</a>
-        <a href="#booking" class="hover:text-white transition">Запись на диагностику</a>
+      <nav class="flex flex-wrap items-center gap-4 text-xs">
+        <a href="#trade-in" class="text-amber-400 hover:text-amber-300 font-semibold transition">Приём Б/У АКБ и UPS</a>
+        <a href="#delivery" class="hover:text-white transition">Доставка и оплата</a>
+        <a href="#delivery" class="hover:text-white transition hidden sm:inline">Гарантия</a>
+        <a href="#services" class="hover:text-white transition hidden md:inline">Заправка автокондиционера</a>
       </nav>
     </div>
   </div>
 
-  <!-- 1. Шапка сайта -->
-  <header class="sticky top-0 z-40 bg-white border-b border-[#D6D5D0]">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
-      <!-- Логотип HYBRID DOCTOR (аккуратная контурная эмблема без синего фона) -->
-      <a href="#" class="flex items-center gap-3 shrink-0 group">
-        <svg class="w-12 h-9 shrink-0" viewBox="0 0 64 42" fill="none" aria-hidden="true">
-          <!-- Силуэт седана / хэтчбека -->
-          <path d="M5 28H10.5M53.5 28H59C60.1 28 61 27.1 61 26V22.4C61 21 60.1 19.7 58.7 19.3L48.5 16.5L39.2 9.2C38 8.2 36.4 7.6 34.7 7.6H20.3C18.2 7.6 16.2 8.5 14.8 10L8.2 17.1L4.5 18.9C3.6 19.3 3 20.3 3 21.3V26C3 27.1 3.9 28 5 28Z"
-                stroke="#1D2025" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <!-- Линия остекления -->
-          <path d="M17.5 16.2L21.2 11.2H34.2L41.5 16.2H17.5Z"
-                stroke="#1D2025" stroke-width="1.5" stroke-linejoin="round"/>
-          <!-- Контур высоковольтной батареи в задней части -->
-          <rect x="37" y="18.5" width="12" height="6.5" rx="1" fill="#FDF3EE" stroke="#E05A1B" stroke-width="1.5"/>
-          <!-- Силовой кабель к передней части -->
-          <path d="M37 22H21" stroke="#E05A1B" stroke-width="1.5" stroke-dasharray="2.5 2"/>
-          <!-- Колёса -->
-          <circle cx="16.5" cy="28.5" r="4.8" fill="#FFFFFF" stroke="#1D2025" stroke-width="2"/>
-          <circle cx="16.5" cy="28.5" r="1.6" fill="#E05A1B"/>
-          <circle cx="47.5" cy="28.5" r="4.8" fill="#FFFFFF" stroke="#1D2025" stroke-width="2"/>
-          <circle cx="47.5" cy="28.5" r="1.6" fill="#E05A1B"/>
+  <!-- Липкая основная шапка -->
+  <header class="sticky top-0 z-40 bg-white border-b border-[#DCE0E6]">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-3 sm:gap-6">
+      <!-- Векторный логотип АВТО АКБ -->
+      <a href="#" class="flex items-center gap-2.5 shrink-0 group">
+        <svg class="w-10 h-10 shrink-0" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+          <rect x="1" y="1" width="38" height="38" rx="6" fill="#0047AB"/>
+          <!-- Клеммы -->
+          <rect x="10" y="7" width="5" height="3" rx="1" fill="#D1D5DB"/>
+          <rect x="25" y="7" width="5" height="3" rx="1" fill="#EF4444"/>
+          <!-- Корпус батареи -->
+          <rect x="7" y="10" width="26" height="21" rx="2.5" fill="#FFFFFF"/>
+          <rect x="7" y="10" width="26" height="4.5" rx="1.5" fill="#EAB308"/>
+          <!-- Знаки - и + -->
+          <rect x="11" y="21.5" width="5.5" height="1.8" rx="0.5" fill="#121417"/>
+          <rect x="23" y="21.5" width="6" height="1.8" rx="0.5" fill="#DC2626"/>
+          <rect x="25.1" y="19.4" width="1.8" height="6" rx="0.5" fill="#DC2626"/>
         </svg>
         <div>
-          <div class="text-base sm:text-lg font-black tracking-tight text-[#1D2025] leading-none group-hover:text-[#E05A1B] transition">
-            HYBRID <span class="text-[#E05A1B]">DOCTOR</span>
-          </div>
-          <div class="text-[11px] sm:text-xs text-[#595D66] mt-1">Ремонт гибридных автомобилей • Бишкек</div>
+          <div class="text-lg font-extrabold tracking-tight text-asphalt leading-none group-hover:text-cobalt-600 transition">АВТО АКБ</div>
+          <div class="text-[11px] font-medium text-gray-500 mt-1">Аккумуляторы • Бишкек</div>
         </div>
       </a>
 
-      <!-- Телефон и кнопки WhatsApp / Telegram -->
-      <div class="flex items-center gap-2 sm:gap-3 shrink-0">
-        <a href="tel:+996999515398" class="text-right mr-0.5 sm:mr-1 group">
-          <div class="font-mono text-sm sm:text-lg font-bold text-[#1D2025] group-hover:text-[#E05A1B] tabular-nums transition">
-            0999 51 53 98
-          </div>
-          <div class="text-[11px] text-[#595D66] hidden sm:block">Пн–Сб: 09:00 – 19:00</div>
-        </a>
+      <!-- Живой поиск в шапке -->
+      <div class="relative flex-1 max-w-xl hidden md:block">
+        <input type="text" id="header-search" oninput="syncSearch(this.value)"
+               placeholder="Поиск по марке авто, бренду или ёмкости: Camry, 60 Ач, Bosch..."
+               class="w-full h-10 pl-9 pr-8 rounded-md border border-[#DCE0E6] bg-[#F4F5F7] text-sm text-asphalt placeholder:text-gray-400 focus:bg-white focus:border-cobalt-600 focus:outline-none transition">
+        <svg class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path>
+        </svg>
+        <button type="button" id="clear-search-btn" onclick="syncSearch('')" title="Очистить поиск"
+                class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-gray-400 hover:text-asphalt font-bold">✕</button>
+      </div>
 
-        <a href="https://wa.me/996999515398?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%9D%D1%83%D0%B6%D0%BD%D0%B0%20%D0%B4%D0%B8%D0%B0%D0%B3%D0%BD%D0%BE%D1%81%D1%82%D0%B8%D0%BA%D0%B0%20%D0%B3%D0%B8%D0%B1%D1%80%D0%B8%D0%B4%D0%BD%D0%BE%D0%B3%D0%BE%20%D0%B0%D0%B2%D1%82%D0%BE%D0%BC%D0%BE%D0%B1%D0%B8%D0%BB%D1%8F%20%D0%B2%20%D0%91%D0%B8%D1%88%D0%BA%D0%B5%D0%BA%D0%B5."
+      <!-- Контакты и кнопка WhatsApp -->
+      <div class="flex items-center gap-2.5 sm:gap-3.5 shrink-0">
+        <a href="tel:+996556157110" class="text-right group">
+          <div class="font-mono text-sm sm:text-base font-bold text-asphalt group-hover:text-cobalt-600 tabular-nums transition">0 (556) 157-110</div>
+          <div class="text-[11px] text-gray-500 hidden sm:block">Ежедневно с 09:00 до 18:00</div>
+        </a>
+        <a href="https://wa.me/996556157110?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%9D%D1%83%D0%B6%D0%BD%D0%B0%20%D0%BF%D0%BE%D0%BC%D0%BE%D1%89%D1%8C%20%D1%81%20%D0%BF%D0%BE%D0%B4%D0%B1%D0%BE%D1%80%D0%BE%D0%BC%20%D0%B0%D0%BA%D0%BA%D1%83%D0%BC%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20%D0%B2%20%D0%91%D0%B8%D1%88%D0%BA%D0%B5%D0%BA%D0%B5."
            target="_blank" rel="noopener"
-           class="inline-flex items-center gap-1.5 h-9 sm:h-10 px-3 sm:px-3.5 rounded bg-[#1F8E49] hover:bg-[#19743B] text-white text-xs sm:text-sm font-medium transition">
-          <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M20.52 3.48A11.86 11.86 0 0 0 12.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.14 1.6 5.95L0 24l6.33-1.66a11.86 11.86 0 0 0 5.73 1.46h.01c6.56 0 11.9-5.34 11.9-11.9 0-3.18-1.24-6.17-3.45-8.42zM12.07 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.76.98 1-3.66-.24-.38a9.86 9.86 0 0 1-1.51-5.25c0-5.45 4.44-9.89 9.9-9.89 2.64 0 5.12 1.03 6.99 2.9a9.82 9.82 0 0 1 2.9 7c0 5.45-4.44 9.89-9.88 9.89zm5.43-7.41c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.21 3.07.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35z"/>
-          </svg>
+           class="inline-flex items-center gap-2 h-10 px-3.5 rounded-md bg-[#16A34A] hover:bg-[#15803D] text-white text-sm font-semibold transition">
+          <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24"><path d="M20.52 3.48A11.86 11.86 0 0 0 12.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.14 1.6 5.95L0 24l6.33-1.66a11.86 11.86 0 0 0 5.73 1.46h.01c6.56 0 11.9-5.34 11.9-11.9 0-3.18-1.24-6.17-3.45-8.42zM12.07 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.76.98 1-3.66-.24-.38a9.86 9.86 0 0 1-1.51-5.25c0-5.45 4.44-9.89 9.9-9.89 2.64 0 5.12 1.03 6.99 2.9a9.82 9.82 0 0 1 2.9 7c0 5.45-4.44 9.89-9.88 9.89zm5.43-7.41c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.21 3.07.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35z"/></svg>
           <span class="hidden sm:inline">WhatsApp</span>
         </a>
+      </div>
+    </div>
 
-        <a href="https://t.me/+996999515398"
-           target="_blank" rel="noopener"
-           class="inline-flex items-center gap-1.5 h-9 sm:h-10 px-3 sm:px-3.5 rounded bg-[#1E78B4] hover:bg-[#186294] text-white text-xs sm:text-sm font-medium transition">
-          <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-          </svg>
-          <span class="hidden sm:inline">Telegram</span>
-        </a>
+    <!-- Мобильный поиск -->
+    <div class="px-4 pb-2.5 md:hidden">
+      <div class="relative">
+        <input type="text" id="mobile-search" oninput="syncSearch(this.value)"
+               placeholder="Поиск: Camry, 60 Ач, Bosch, Varta..."
+               class="w-full h-9 pl-8 pr-3 rounded-md border border-[#DCE0E6] bg-[#F4F5F7] text-xs text-asphalt focus:bg-white focus:border-cobalt-600 focus:outline-none">
+        <svg class="w-3.5 h-3.5 text-gray-400 absolute left-2.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path>
+        </svg>
       </div>
     </div>
   </header>
 
-  <!-- 2. Первый экран: слева — оффер мастерской, справа — интерактивный чертёж узлов гибрида -->
-  <section id="schematic-section" class="bg-white border-b border-[#D6D5D0]">
-    <div class="max-w-6xl mx-auto px-4 py-8 lg:py-12">
-      <div class="grid lg:grid-cols-12 gap-8 items-start">
+  <!-- Компактный первый экран + Инженерный блок подбора -->
+  <section class="bg-white border-b border-[#DCE0E6]">
+    <div class="max-w-7xl mx-auto px-4 py-6 sm:py-8">
+      <div class="grid lg:grid-cols-12 gap-6 items-start">
 
-        <!-- Левая колонка -->
-        <div class="lg:col-span-5 space-y-5">
-          <div class="text-xs font-mono text-[#595D66] border-b border-[#D6D5D0] pb-2">
-            Мастерская гибридного транспорта • г. Бишкек
+        <!-- Левая колонка: Чёткое УТП и условия работы -->
+        <div class="lg:col-span-5 space-y-4">
+          <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-cobalt-50 border border-cobalt-100 text-cobalt-700 text-xs font-semibold">
+            <span>Склад и выездная служба в Бишкеке</span>
           </div>
 
-          <h1 class="text-2xl sm:text-3xl lg:text-[34px] font-bold text-[#1D2025] leading-tight">
-            Диагностика и ремонт гибридных автомобилей Toyota и Lexus в Бишкеке
+          <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-asphalt leading-tight">
+            Автомобильные аккумуляторы с доставкой и установкой в Бишкеке
           </h1>
 
-          <p class="text-sm sm:text-base text-[#3D414A] leading-relaxed">
-            Проверяем высоковольтные батареи по элементам под нагрузкой, ремонтируем инверторы и меняем помпы охлаждения гибридной установки. Сначала проводим точную дефектовку на сканере и показываем реальное состояние узлов — без навязывания лишних замен.
+          <p class="text-sm text-gray-600 leading-relaxed">
+            В наличии легковые, грузовые, мотоциклетные и гелевые АКБ для UPS. При доставке бесплатно проверяем напряжение генератора и ток утечки мультиметром, а ваш старый аккумулятор забираем в зачёт стоимости со скидкой до <span class="font-mono font-semibold text-asphalt">2 200 сом</span>.
           </p>
 
-          <!-- Две главные кнопки -->
-          <div class="flex flex-col sm:flex-row gap-2.5 pt-1">
-            <a href="#booking"
-               class="h-11 px-5 rounded bg-[#E05A1B] hover:bg-[#C44B12] text-white text-sm font-bold inline-flex items-center justify-center transition">
-              Записаться на диагностику
-            </a>
-            <a href="https://wa.me/996999515398?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%20%D0%BF%D0%BE%20%D0%B4%D0%B8%D0%B0%D0%B3%D0%BD%D0%BE%D1%81%D1%82%D0%B8%D0%BA%D0%B5%20%D0%B3%D0%B8%D0%B1%D1%80%D0%B8%D0%B4%D0%B0%20%D0%B2%20%D0%91%D0%B8%D1%88%D0%BA%D0%B5%D0%BA%D0%B5."
-               target="_blank" rel="noopener"
-               class="h-11 px-5 rounded border border-[#1D2025] bg-white hover:bg-[#F5F5F3] text-[#1D2025] text-sm font-bold inline-flex items-center justify-center transition">
-              Написать в WhatsApp
-            </a>
-          </div>
-
-          <!-- Короткие факты о подходе к работе -->
-          <div class="pt-3 border-t border-[#D6D5D0] space-y-2 text-xs sm:text-sm text-[#3D414A]">
-            <div class="flex items-start gap-2">
-              <span class="font-mono font-bold text-[#E05A1B]">—</span>
-              <span>Итоговую стоимость называем только после замера элементов и проверки сканером.</span>
-            </div>
-            <div class="flex items-start gap-2">
-              <span class="font-mono font-bold text-[#E05A1B]">—</span>
-              <span>Обслуживаем Prius, Camry, Aqua, Corolla Fielder, Estima, Alphard, Lexus RX, CT200h, ES300h.</span>
-            </div>
-          </div>
+          <!-- Технические гарантии списком (без псевдо-инфографики) -->
+          <ul class="pt-1 space-y-2 text-xs sm:text-sm text-gray-700 border-t border-[#DCE0E6]">
+            <li class="flex items-start gap-2 pt-2">
+              <span class="font-mono font-bold text-cobalt-600">01.</span>
+              <span>Проверка нагрузочной вилкой и свежести даты выпуска перед выездом курьера.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="font-mono font-bold text-cobalt-600">02.</span>
+              <span>Замена с сохранением питания бортовой сети — настройки магнитолы и ЭБУ не собьются.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="font-mono font-bold text-cobalt-600">03.</span>
+              <span>Оплата после установки: наличные, МБанк, О!Деньги или безнал с документами для ОсОО/ИП.</span>
+            </li>
+          </ul>
         </div>
 
-        <!-- Правая колонка: Интерактивная техническая схема гибридного автомобиля в разрезе -->
-        <div class="lg:col-span-7 bg-white border border-[#D6D5D0] rounded overflow-hidden">
-          <div class="px-4 py-2.5 bg-[#F5F5F3] border-b border-[#D6D5D0] flex items-center justify-between gap-2">
-            <span class="text-xs font-bold text-[#1D2025]">Схема узлов гибридной установки (нажмите на узел)</span>
-            <span id="schematic-code" class="font-mono text-xs text-[#595D66]">Узел 01 / 04</span>
-          </div>
-
-          <!-- Векторный чертёж автомобиля в разрезе -->
-          <div class="blueprint-grid p-3 sm:p-4 border-b border-[#D6D5D0]">
-            <svg viewBox="0 0 640 245" class="w-full h-auto select-none" role="img" aria-label="Интерактивная схема гибридного автомобиля в разрезе">
-              <!-- Опорная линия пола бокса -->
-              <line x1="20" y1="216" x2="620" y2="216" stroke="#B8B6AE" stroke-width="1.5" />
-              <line x1="20" y1="220" x2="620" y2="220" stroke="#D6D5D0" stroke-width="1" stroke-dasharray="4 4" />
-
-              <!-- Внешний контур кузова (лифтбек / седан) -->
-              <path d="M46 184 H102 A42 42 0 0 1 186 184 H454 A42 42 0 0 1 538 184 H590 C598 184 604 178 604 170 V142 C604 132 596 123 585 119 L518 98 L428 46 C415 39 399 35 383 35 H242 C222 35 203 43 189 57 L126 112 L58 126 C46 129 38 139 38 151 V174 C38 180 41 184 46 184 Z"
-                    fill="#FFFFFF" fill-opacity="0.72" stroke="#1D2025" stroke-width="2" stroke-linejoin="round" />
-
-              <!-- Линия остекления и стойки салона -->
-              <path d="M168 108 L212 56 H380 L476 108 H168 Z"
-                    fill="#F5F5F3" stroke="#7A7D85" stroke-width="1.4" stroke-linejoin="round" />
-              <line x1="308" y1="56" x2="308" y2="108" stroke="#7A7D85" stroke-width="1.4" />
-              <!-- Контур сидений салона (пунктир разреза) -->
-              <path d="M254 166 V122 L242 96 M362 166 V122 L352 98"
-                    stroke="#A3A5AC" stroke-width="1.4" stroke-linecap="round" stroke-dasharray="3 3" fill="none" />
-
-              <!-- Фара и задний фонарь -->
-              <path d="M42 136 L68 132 L62 146 L40 148 Z" fill="#FDF3EE" stroke="#1D2025" stroke-width="1.2" />
-              <path d="M598 128 L576 124 L580 142 L602 144 Z" fill="#FDF3EE" stroke="#1D2025" stroke-width="1.2" />
-
-              <!-- Колёса и тормозные диски -->
-              <g>
-                <circle cx="144" cy="184" r="32" fill="#FFFFFF" stroke="#1D2025" stroke-width="2.2" />
-                <circle cx="144" cy="184" r="21" fill="#F5F5F3" stroke="#595D66" stroke-width="1.4" />
-                <circle cx="144" cy="184" r="7" fill="#1D2025" />
-                <line x1="144" y1="163" x2="144" y2="205" stroke="#7A7D85" stroke-width="1.2" />
-                <line x1="123" y1="184" x2="165" y2="184" stroke="#7A7D85" stroke-width="1.2" />
-              </g>
-              <g>
-                <circle cx="496" cy="184" r="32" fill="#FFFFFF" stroke="#1D2025" stroke-width="2.2" />
-                <circle cx="496" cy="184" r="21" fill="#F5F5F3" stroke="#595D66" stroke-width="1.4" />
-                <circle cx="496" cy="184" r="7" fill="#1D2025" />
-                <line x1="496" y1="163" x2="496" y2="205" stroke="#7A7D85" stroke-width="1.2" />
-                <line x1="475" y1="184" x2="517" y2="184" stroke="#7A7D85" stroke-width="1.2" />
-              </g>
-
-              <!-- Силовые высоковольтные кабели (от батареи к инвертору) и трубки охлаждения -->
-              <path d="M406 154 H210 L176 130" fill="none" stroke="#E05A1B" stroke-width="2.5" stroke-linecap="round" />
-              <path d="M406 160 H206 L172 135" fill="none" stroke="#1D2025" stroke-width="1.5" stroke-dasharray="4 3" />
-              <!-- Контур охлаждения инвертора -->
-              <path d="M126 124 H76 V154" fill="none" stroke="#3B82F6" stroke-width="1.8" stroke-dasharray="3 2" />
-
-              <!-- УЗЕЛ 4: Двигатель и планетарная передача -->
-              <g id="svg-node-engine" onclick="selectSchematicNode('engine')" class="cursor-pointer">
-                <rect x="108" y="138" width="76" height="40" rx="4" fill="#ECEBE6" stroke="#1D2025" stroke-width="1.6" />
-                <!-- Шестерни планетарной передачи -->
-                <circle cx="164" cy="158" r="12" fill="#FFFFFF" stroke="#1D2025" stroke-width="1.4" />
-                <circle cx="164" cy="158" r="5" fill="#7A7D85" />
-                <!-- Цилиндры ДВС -->
-                <rect x="116" y="145" width="10" height="26" rx="1.5" fill="#FFFFFF" stroke="#595D66" stroke-width="1.2" />
-                <rect x="130" y="145" width="10" height="26" rx="1.5" fill="#FFFFFF" stroke="#595D66" stroke-width="1.2" />
-                <!-- Маркер 4 -->
-                <circle cx="146" cy="186" r="11" fill="#1D2025" stroke="#FFFFFF" stroke-width="1.5" />
-                <text x="146" y="190" text-anchor="middle" fill="#FFFFFF" font-size="11" font-weight="700" font-family="PT Mono, monospace">4</text>
-              </g>
-
-              <!-- УЗЕЛ 3: Помпа охлаждения гибридной установки -->
-              <g id="svg-node-pump" onclick="selectSchematicNode('pump')" class="cursor-pointer">
-                <!-- Радиатор контура -->
-                <rect x="54" y="138" width="10" height="38" rx="1.5" fill="#DBEAFE" stroke="#1D2025" stroke-width="1.4" />
-                <!-- Электрическая помпа -->
-                <circle cx="80" cy="162" r="13" fill="#ECEBE6" stroke="#1D2025" stroke-width="1.6" />
-                <path d="M74 162 H86 M80 156 V168" stroke="#1D2025" stroke-width="1.5" />
-                <!-- Маркер 3 -->
-                <circle cx="80" cy="134" r="11" fill="#1D2025" stroke="#FFFFFF" stroke-width="1.5" />
-                <text x="80" y="138" text-anchor="middle" fill="#FFFFFF" font-size="11" font-weight="700" font-family="PT Mono, monospace">3</text>
-              </g>
-
-              <!-- УЗЕЛ 2: Инвертор под капотом -->
-              <g id="svg-node-inverter" onclick="selectSchematicNode('inverter')" class="cursor-pointer">
-                <rect x="122" y="106" width="56" height="26" rx="3" fill="#ECEBE6" stroke="#1D2025" stroke-width="1.6" />
-                <line x1="130" y1="114" x2="170" y2="114" stroke="#595D66" stroke-width="1.2" />
-                <line x1="130" y1="120" x2="170" y2="120" stroke="#595D66" stroke-width="1.2" />
-                <!-- Маркер 2 -->
-                <circle cx="150" cy="84" r="11" fill="#1D2025" stroke="#FFFFFF" stroke-width="1.5" />
-                <text x="150" y="88" text-anchor="middle" fill="#FFFFFF" font-size="11" font-weight="700" font-family="PT Mono, monospace">2</text>
-                <line x1="150" y1="95" x2="150" y2="106" stroke="#1D2025" stroke-width="1.2" />
-              </g>
-
-              <!-- УЗЕЛ 1: Высоковольтная батарея в задней части (активна по умолчанию) -->
-              <g id="svg-node-battery" onclick="selectSchematicNode('battery')" class="cursor-pointer">
-                <rect x="406" y="122" width="114" height="44" rx="4" fill="#FDF3EE" stroke="#E05A1B" stroke-width="2.2" />
-                <!-- Секции элементов внутри батареи -->
-                <rect x="414" y="129" width="10" height="30" rx="1" fill="#FFFFFF" stroke="#E05A1B" stroke-width="1.2" />
-                <rect x="428" y="129" width="10" height="30" rx="1" fill="#FFFFFF" stroke="#E05A1B" stroke-width="1.2" />
-                <rect x="442" y="129" width="10" height="30" rx="1" fill="#FFFFFF" stroke="#E05A1B" stroke-width="1.2" />
-                <rect x="456" y="129" width="10" height="30" rx="1" fill="#FFFFFF" stroke="#E05A1B" stroke-width="1.2" />
-                <rect x="470" y="129" width="10" height="30" rx="1" fill="#FFFFFF" stroke="#E05A1B" stroke-width="1.2" />
-                <rect x="484" y="129" width="10" height="30" rx="1" fill="#FFFFFF" stroke="#E05A1B" stroke-width="1.2" />
-                <rect x="498" y="129" width="14" height="30" rx="1" fill="#E05A1B" fill-opacity="0.18" stroke="#E05A1B" stroke-width="1.2" />
-                <!-- Маркер 1 -->
-                <circle cx="463" cy="96" r="12" fill="#E05A1B" stroke="#FFFFFF" stroke-width="1.5" />
-                <text x="463" y="100" text-anchor="middle" fill="#FFFFFF" font-size="11" font-weight="700" font-family="PT Mono, monospace">1</text>
-                <line x1="463" y1="108" x2="463" y2="122" stroke="#E05A1B" stroke-width="1.5" />
-              </g>
-            </svg>
-          </div>
-
-          <!-- Кнопки переключения 4 узлов -->
-          <div class="grid grid-cols-2 sm:grid-cols-4 border-b border-[#D6D5D0] divide-y sm:divide-y-0 sm:divide-x divide-[#D6D5D0]">
-            <button type="button" id="node-btn-battery" onclick="selectSchematicNode('battery')"
-                    class="p-2.5 text-left text-xs font-bold bg-[#FDF3EE] text-[#E05A1B] transition">
-              <span class="font-mono block text-[11px]">01.</span>
-              <span>Высоковольтная батарея</span>
+        <!-- Правая колонка: Рабочий инструмент подбора -->
+        <div class="lg:col-span-7 bg-[#F4F5F7] border border-[#DCE0E6] rounded-lg p-4 sm:p-5">
+          <!-- Вкладки подбора -->
+          <div class="flex border-b border-[#DCE0E6] mb-4 gap-1">
+            <button type="button" id="tab-params" onclick="switchSelectorTab('params')"
+                    class="px-4 py-2 text-xs sm:text-sm font-bold border-b-2 border-cobalt-600 text-cobalt-600 -mb-px transition">
+              Подбор по параметрам
             </button>
-            <button type="button" id="node-btn-inverter" onclick="selectSchematicNode('inverter')"
-                    class="p-2.5 text-left text-xs font-medium bg-white hover:bg-[#F5F5F3] text-[#1D2025] transition">
-              <span class="font-mono block text-[11px] text-[#595D66]">02.</span>
-              <span>Инвертор под капотом</span>
-            </button>
-            <button type="button" id="node-btn-pump" onclick="selectSchematicNode('pump')"
-                    class="p-2.5 text-left text-xs font-medium bg-white hover:bg-[#F5F5F3] text-[#1D2025] transition">
-              <span class="font-mono block text-[11px] text-[#595D66]">03.</span>
-              <span>Помпа охлаждения</span>
-            </button>
-            <button type="button" id="node-btn-engine" onclick="selectSchematicNode('engine')"
-                    class="p-2.5 text-left text-xs font-medium bg-white hover:bg-[#F5F5F3] text-[#1D2025] transition">
-              <span class="font-mono block text-[11px] text-[#595D66]">04.</span>
-              <span>Двигатель и передача</span>
+            <button type="button" id="tab-cars" onclick="switchSelectorTab('cars')"
+                    class="px-4 py-2 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-gray-600 hover:text-asphalt -mb-px transition">
+              Популярные авто в Бишкеке
             </button>
           </div>
 
-          <!-- Пояснение по выбранному узлу -->
-          <div class="p-4 sm:p-5 bg-white space-y-3">
-            <div class="flex flex-wrap items-center justify-between gap-2">
-              <h2 id="node-title" class="text-base sm:text-lg font-bold text-[#1D2025]">
-                1. Высоковольтная батарея в задней части
-              </h2>
-              <button type="button" id="node-book-btn" onclick="bookSelectedNode()"
-                      class="text-xs font-bold text-[#E05A1B] hover:text-[#C44B12] underline underline-offset-4">
-                Записаться на проверку этого узла →
-              </button>
+          <!-- Вкладка 1: Подбор по параметрам и Trade-In -->
+          <div id="panel-params" class="space-y-3.5">
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <div>
+                <label for="filter-category" class="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-1">Тип АКБ</label>
+                <select id="filter-category" onchange="applyFilters()"
+                        class="w-full h-10 rounded-md border border-[#DCE0E6] bg-white px-2.5 text-xs sm:text-sm font-medium text-asphalt focus:border-cobalt-600 focus:outline-none">
+                  <option value="all">Все категории</option>
+                  <option value="car">Автомобильные</option>
+                  <option value="truck">Грузовые</option>
+                  <option value="gel">Гелевые / AGM / UPS</option>
+                  <option value="moto">Мотоциклетные</option>
+                  <option value="acc">Клеммы и аксессуары</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="filter-standard" class="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-1">Стандарт корпуса</label>
+                <select id="filter-standard" onchange="applyFilters()"
+                        class="w-full h-10 rounded-md border border-[#DCE0E6] bg-white px-2.5 text-xs sm:text-sm font-medium text-asphalt focus:border-cobalt-600 focus:outline-none">
+                  <option value="all">Любой стандарт</option>
+                  <option value="Азия (JIS)">Азия (JIS)</option>
+                  <option value="Европа (DIN)">Европа (DIN)</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="filter-capacity" class="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-1">Ёмкость, А·ч</label>
+                <select id="filter-capacity" onchange="applyFilters()"
+                        class="w-full h-10 rounded-md border border-[#DCE0E6] bg-white px-2.5 text-xs sm:text-sm font-medium text-asphalt focus:border-cobalt-600 focus:outline-none">
+                  <option value="all">Любая ёмкость</option>
+                  <option value="45-60">45 – 60 А·ч</option>
+                  <option value="61-77">61 – 77 А·ч</option>
+                  <option value="78-110">78 – 110 А·ч</option>
+                  <option value="140-225">140 – 225 А·ч</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="filter-polarity" class="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-1">Полярность</label>
+                <select id="filter-polarity" onchange="applyFilters()"
+                        class="w-full h-10 rounded-md border border-[#DCE0E6] bg-white px-2.5 text-xs sm:text-sm font-medium text-asphalt focus:border-cobalt-600 focus:outline-none">
+                  <option value="all">Любая полярность</option>
+                  <option value="Обратная [- +]">Обратная [- +]</option>
+                  <option value="Прямая [+ -]">Прямая [+ -]</option>
+                </select>
+              </div>
             </div>
 
-            <div class="grid sm:grid-cols-2 gap-4 text-xs sm:text-sm pt-1">
-              <div class="bg-[#F5F5F3] border border-[#D6D5D0] rounded p-3">
-                <div class="font-bold text-[#1D2025] mb-1">Какие признаки видит водитель:</div>
-                <p id="node-symptoms" class="text-[#3D414A] leading-relaxed">
-                  Заряд на экране быстро доходит до максимума и за пару минут падает до двух делений, загорается ошибка гибридной системы на приборной панели, увеличивается расход бензина.
-                </p>
+            <!-- Строка расчёта скидки за старый АКБ -->
+            <div class="bg-white border border-[#DCE0E6] rounded-md p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="flex-1">
+                <label for="tradein-select" class="block text-xs font-bold text-asphalt mb-1">
+                  Сдать старый АКБ в зачёт (мгновенная скидка):
+                </label>
+                <select id="tradein-select" onchange="updateTradeIn()"
+                        class="w-full h-9 rounded-md border border-[#DCE0E6] bg-[#F4F5F7] px-2.5 text-xs sm:text-sm font-semibold text-asphalt focus:bg-white focus:border-cobalt-600 focus:outline-none">
+                  <option value="0">Без сдачи старого АКБ (0 сом)</option>
+                  <option value="800" selected>Сдам 45–60 А·ч (скидка −800 сом)</option>
+                  <option value="1100">Сдам 62–77 А·ч (скидка −1 100 сом)</option>
+                  <option value="1500">Сдам 80–110 А·ч (скидка −1 500 сом)</option>
+                  <option value="2200">Сдам грузовой 140–225 А·ч (скидка −2 200 сом)</option>
+                </select>
               </div>
-              <div class="bg-[#F5F5F3] border border-[#D6D5D0] rounded p-3">
-                <div class="font-bold text-[#1D2025] mb-1">Как проверяем в боксе:</div>
-                <p id="node-check" class="text-[#3D414A] leading-relaxed">
-                  Подключаем профильный сканер, смотрим разброс напряжения по парам элементов под нагрузкой, проверяем состояние медных контактов и чистоту вентилятора охлаждения.
-                </p>
+
+              <div class="flex items-center gap-2 shrink-0 sm:pt-4">
+                <a href="#catalog" onclick="applyFilters()"
+                   class="h-9 px-4 rounded-md bg-cobalt-600 hover:bg-cobalt-700 text-white text-xs sm:text-sm font-semibold inline-flex items-center justify-center transition">
+                  Найдено: <span id="match-count" class="font-mono ml-1.5">14</span>
+                </a>
+                <button type="button" onclick="resetFilters()"
+                        class="h-9 px-3 rounded-md border border-[#DCE0E6] bg-white hover:bg-gray-50 text-xs font-semibold text-gray-600 transition">
+                  Сбросить
+                </button>
               </div>
             </div>
           </div>
-        </div>
 
+          <!-- Вкладка 2: Популярные авто в Бишкеке + запрос по своей машине -->
+          <div id="panel-cars" class="hidden space-y-3.5">
+            <div>
+              <div class="text-xs font-bold text-gray-600 mb-2">Нажмите на модель авто, чтобы отфильтровать совместимые АКБ в каталоге:</div>
+              <div class="flex flex-wrap gap-2" id="car-presets">
+                <button type="button" onclick="selectCarPreset('Toyota Camry / Corolla', 'camry')" data-car="camry"
+                        class="car-chip px-3 py-1.5 rounded-md border border-[#DCE0E6] bg-white hover:border-cobalt-600 text-xs font-semibold text-asphalt transition">
+                  Toyota Camry / Corolla
+                </button>
+                <button type="button" onclick="selectCarPreset('Honda Fit / Stepwgn', 'fit')" data-car="fit"
+                        class="car-chip px-3 py-1.5 rounded-md border border-[#DCE0E6] bg-white hover:border-cobalt-600 text-xs font-semibold text-asphalt transition">
+                  Honda Fit / Stepwgn
+                </button>
+                <button type="button" onclick="selectCarPreset('Kia / Hyundai', 'kia')" data-car="kia"
+                        class="car-chip px-3 py-1.5 rounded-md border border-[#DCE0E6] bg-white hover:border-cobalt-600 text-xs font-semibold text-asphalt transition">
+                  Kia / Hyundai
+                </button>
+                <button type="button" onclick="selectCarPreset('Mercedes / BMW', 'euro')" data-car="euro"
+                        class="car-chip px-3 py-1.5 rounded-md border border-[#DCE0E6] bg-white hover:border-cobalt-600 text-xs font-semibold text-asphalt transition">
+                  Mercedes / BMW
+                </button>
+                <button type="button" onclick="selectCarPreset('Land Cruiser / Prado', 'suv')" data-car="suv"
+                        class="car-chip px-3 py-1.5 rounded-md border border-[#DCE0E6] bg-white hover:border-cobalt-600 text-xs font-semibold text-asphalt transition">
+                  Land Cruiser / Prado
+                </button>
+                <button type="button" onclick="selectCarPreset('Daewoo Nexia / Matiz', 'daewoo')" data-car="daewoo"
+                        class="car-chip px-3 py-1.5 rounded-md border border-[#DCE0E6] bg-white hover:border-cobalt-600 text-xs font-semibold text-asphalt transition">
+                  Daewoo Nexia / Matiz
+                </button>
+              </div>
+            </div>
+
+            <div class="bg-white border border-[#DCE0E6] rounded-md p-3">
+              <label for="custom-car-input" class="block text-xs font-bold text-asphalt mb-1.5">
+                Другой автомобиль? Укажите марку, год и объём двигателя — подберём в WhatsApp за 3 минуты:
+              </label>
+              <div class="flex flex-col sm:flex-row gap-2">
+                <input type="text" id="custom-car-input" placeholder="Например: Subaru Outback 2012, 2.5 бензин"
+                       class="flex-1 h-9 rounded-md border border-[#DCE0E6] bg-[#F4F5F7] px-3 text-xs sm:text-sm text-asphalt focus:bg-white focus:border-cobalt-600 focus:outline-none">
+                <button type="button" onclick="sendCustomCarWhatsApp()"
+                        class="h-9 px-4 rounded-md bg-[#16A34A] hover:bg-[#15803D] text-white text-xs sm:text-sm font-semibold shrink-0 transition">
+                  Отправить в WhatsApp
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- 3. Блок «Когда стоит заехать на проверку» -->
-  <section class="max-w-6xl mx-auto px-4 py-10 sm:py-12">
-    <div class="mb-6">
-      <h2 class="text-xl sm:text-2xl font-bold text-[#1D2025]">Когда стоит заехать на проверку</h2>
-      <p class="text-sm text-[#595D66] mt-1">
-        Четыре типовые ситуации владельцев гибридных автомобилей в Бишкеке, при которых не стоит откладывать диагностику.
-      </p>
+  <!-- Полоса фильтрации по брендам со счётчиком позиций -->
+  <section class="bg-white border-b border-[#DCE0E6]">
+    <div class="max-w-7xl mx-auto px-4 py-3">
+      <div id="brand-strip" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar"></div>
     </div>
+  </section>
 
-    <div class="grid md:grid-cols-2 gap-4">
-      <div class="bg-white border border-[#D6D5D0] rounded p-5">
-        <div class="font-mono text-xs font-bold text-[#E05A1B] mb-1.5">Ситуация 01</div>
-        <h3 class="text-base font-bold text-[#1D2025]">Загорелась ошибка гибридной системы на приборной панели</h3>
-        <p class="text-xs sm:text-sm text-[#3D414A] mt-2 leading-relaxed">
-          Появился красный треугольник или сообщение о неисправности гибридной установки. Снимать клемму аккумулятора для сброса не стоит — при диагностике важно увидеть сохранённый код и условия, при которых возник сбой.
+  <!-- Основной каталог -->
+  <main id="catalog" class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Панель управления каталогом -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 mb-6 border-b border-[#DCE0E6]">
+      <div>
+        <div class="flex flex-wrap items-center gap-2.5">
+          <h2 class="text-xl sm:text-2xl font-extrabold text-asphalt">Каталог аккумуляторов</h2>
+          <span id="active-car-badge" class="hidden items-center gap-1.5 px-2.5 py-1 rounded bg-amber-100 border border-amber-300 text-amber-900 text-xs font-bold">
+            <span id="active-car-label"></span>
+            <button type="button" onclick="clearCarPreset()" class="hover:text-black font-mono ml-1">✕</button>
+          </span>
+        </div>
+        <p class="text-xs sm:text-sm text-gray-500 mt-1">
+          Показано позиций: <span id="visible-count" class="font-mono font-semibold text-asphalt">14</span> • Все цены указаны в сомах (KGS).
         </p>
-      </div>
-
-      <div class="bg-white border border-[#D6D5D0] rounded p-5">
-        <div class="font-mono text-xs font-bold text-[#E05A1B] mb-1.5">Ситуация 02</div>
-        <h3 class="text-base font-bold text-[#1D2025]">Батарея быстро заряжается и тут же падает до двух делений</h3>
-        <p class="text-xs sm:text-sm text-[#3D414A] mt-2 leading-relaxed">
-          Прямой признак потери ёмкости в отдельных элементах высоковольтной батареи. На ранней стадии проблему часто удаётся решить заменой просевших ячеек и чисткой шин без полной замены всей сборки.
-        </p>
-      </div>
-
-      <div class="bg-white border border-[#D6D5D0] rounded p-5">
-        <div class="font-mono text-xs font-bold text-[#E05A1B] mb-1.5">Ситуация 03</div>
-        <h3 class="text-base font-bold text-[#1D2025]">Вырос расход бензина и машина редко переходит на электротягу</h3>
-        <p class="text-xs sm:text-sm text-[#3D414A] mt-2 leading-relaxed">
-          Двигатель внутреннего сгорания почти не глохнет на светофорах и в пробках, а электромотор слабо помогает при разгоне. Проверяем температуру батареи, работу вентилятора охлаждения и коррекции двигателя.
-        </p>
-      </div>
-
-      <div class="bg-white border border-[#D6D5D0] rounded p-5">
-        <div class="font-mono text-xs font-bold text-[#E05A1B] mb-1.5">Ситуация 04</div>
-        <h3 class="text-base font-bold text-[#1D2025]">Осмотр гибрида перед покупкой на рынке или с рук</h3>
-        <p class="text-xs sm:text-sm text-[#3D414A] mt-2 leading-relaxed">
-          Перед сделкой ошибки на панели часто стирают обычным сканером, и они загораются снова через 30–50 километров. Проверяем реальный остаточный ресурс батареи под нагрузкой и состояние инвертора до передачи денег.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- 4. Блок «Основные работы в мастерской» (строчный список 01–06 без плиток и цен) -->
-  <section id="works" class="bg-white border-y border-[#D6D5D0] py-10 sm:py-12">
-    <div class="max-w-6xl mx-auto px-4">
-      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6">
-        <div>
-          <h2 class="text-xl sm:text-2xl font-bold text-[#1D2025]">Основные работы в мастерской</h2>
-          <p class="text-sm text-[#595D66] mt-1">
-            Точную стоимость работ и запчастей называем после компьютерной диагностики и осмотра автомобиля в боксе.
-          </p>
-        </div>
-        <a href="#booking" class="text-xs sm:text-sm font-bold text-[#E05A1B] hover:text-[#C44B12] shrink-0">
-          Записаться на осмотр →
-        </a>
-      </div>
-
-      <div class="border border-[#D6D5D0] rounded divide-y divide-[#D6D5D0] bg-white">
-        <!-- Строка 01 -->
-        <div class="p-4 sm:px-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-[#FAF9F6] transition">
-          <div class="flex items-start gap-3.5">
-            <span class="font-mono text-sm font-bold text-[#E05A1B] pt-0.5 shrink-0">01.</span>
-            <div>
-              <h3 class="text-sm sm:text-base font-bold text-[#1D2025]">Компьютерная диагностика профильным сканером</h3>
-              <p class="text-xs sm:text-sm text-[#595D66] mt-0.5">Чтение активных и сохранённых ошибок, проверка параметров всех электронных блоков гибридной установки в реальном времени.</p>
-            </div>
-          </div>
-          <button type="button" onclick="quickBookWork('Горит ошибка гибридной системы / красный треугольник')"
-                  class="self-start sm:self-center shrink-0 px-3 py-1.5 rounded border border-[#D6D5D0] hover:border-[#1D2025] text-xs font-medium text-[#1D2025] transition">
-            Записаться
-          </button>
-        </div>
-
-        <!-- Строка 02 -->
-        <div class="p-4 sm:px-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-[#FAF9F6] transition">
-          <div class="flex items-start gap-3.5">
-            <span class="font-mono text-sm font-bold text-[#E05A1B] pt-0.5 shrink-0">02.</span>
-            <div>
-              <h3 class="text-sm sm:text-base font-bold text-[#1D2025]">Проверка высоковольтной батареи по элементам под нагрузкой</h3>
-              <p class="text-xs sm:text-sm text-[#595D66] mt-0.5">Замер разброса напряжения по каждой паре ячеек при разгоне и рекуперации, выявление просевших элементов.</p>
-            </div>
-          </div>
-          <button type="button" onclick="quickBookWork('Батарея быстро разряжается')"
-                  class="self-start sm:self-center shrink-0 px-3 py-1.5 rounded border border-[#D6D5D0] hover:border-[#1D2025] text-xs font-medium text-[#1D2025] transition">
-            Записаться
-          </button>
-        </div>
-
-        <!-- Строка 03 -->
-        <div class="p-4 sm:px-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-[#FAF9F6] transition">
-          <div class="flex items-start gap-3.5">
-            <span class="font-mono text-sm font-bold text-[#E05A1B] pt-0.5 shrink-0">03.</span>
-            <div>
-              <h3 class="text-sm sm:text-base font-bold text-[#1D2025]">Ремонт и восстановление батареи, замена неисправных элементов, чистка контактов и вентиляции</h3>
-              <p class="text-xs sm:text-sm text-[#595D66] mt-0.5">Подбор элементов по ёмкости и внутреннему сопротивлению, очистка медных шин от окислов, чистка вентилятора и воздуховодов.</p>
-            </div>
-          </div>
-          <button type="button" onclick="quickBookWork('Батарея быстро разряжается')"
-                  class="self-start sm:self-center shrink-0 px-3 py-1.5 rounded border border-[#D6D5D0] hover:border-[#1D2025] text-xs font-medium text-[#1D2025] transition">
-            Записаться
-          </button>
-        </div>
-
-        <!-- Строка 04 -->
-        <div class="p-4 sm:px-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-[#FAF9F6] transition">
-          <div class="flex items-start gap-3.5">
-            <span class="font-mono text-sm font-bold text-[#E05A1B] pt-0.5 shrink-0">04.</span>
-            <div>
-              <h3 class="text-sm sm:text-base font-bold text-[#1D2025]">Ремонт и замена инвертора, проверка системы охлаждения и замена помпы инвертора</h3>
-              <p class="text-xs sm:text-sm text-[#595D66] mt-0.5">Проверка циркуляции охлаждающей жидкости, замена электрической помпы, удаление воздушных пробок и контроль нагрева силовой части.</p>
-            </div>
-          </div>
-          <button type="button" onclick="quickBookWork('Перегрев / не работает помпа охлаждения')"
-                  class="self-start sm:self-center shrink-0 px-3 py-1.5 rounded border border-[#D6D5D0] hover:border-[#1D2025] text-xs font-medium text-[#1D2025] transition">
-            Записаться
-          </button>
-        </div>
-
-        <!-- Строка 05 -->
-        <div class="p-4 sm:px-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-[#FAF9F6] transition">
-          <div class="flex items-start gap-3.5">
-            <span class="font-mono text-sm font-bold text-[#E05A1B] pt-0.5 shrink-0">05.</span>
-            <div>
-              <h3 class="text-sm sm:text-base font-bold text-[#1D2025]">Обслуживание тормозной системы и электронного блока управления тормозами</h3>
-              <p class="text-xs sm:text-sm text-[#595D66] mt-0.5">Диагностика гидроаккумулятора, замена тормозной жидкости и прокачка контура по заводской процедуре через сканер.</p>
-            </div>
-          </div>
-          <button type="button" onclick="quickBookWork('Горит ошибка гибридной системы / красный треугольник')"
-                  class="self-start sm:self-center shrink-0 px-3 py-1.5 rounded border border-[#D6D5D0] hover:border-[#1D2025] text-xs font-medium text-[#1D2025] transition">
-            Записаться
-          </button>
-        </div>
-
-        <!-- Строка 06 -->
-        <div class="p-4 sm:px-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-[#FAF9F6] transition">
-          <div class="flex items-start gap-3.5">
-            <span class="font-mono text-sm font-bold text-[#E05A1B] pt-0.5 shrink-0">06.</span>
-            <div>
-              <h3 class="text-sm sm:text-base font-bold text-[#1D2025]">Комплексная проверка гибридной части перед покупкой автомобиля</h3>
-              <p class="text-xs sm:text-sm text-[#595D66] mt-0.5">Оценка остаточного ресурса высоковольтной батареи, проверка истории сброса ошибок, состояния инвертора и тормозного узла.</p>
-            </div>
-          </div>
-          <button type="button" onclick="quickBookWork('Проверка перед покупкой авто')"
-                  class="self-start sm:self-center shrink-0 px-3 py-1.5 rounded border border-[#D6D5D0] hover:border-[#1D2025] text-xs font-medium text-[#1D2025] transition">
-            Записаться
-          </button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 5. Уникальный блок: «Что означают значки на приборной панели» -->
-  <section id="dashboard-signs" class="max-w-6xl mx-auto px-4 py-10 sm:py-12">
-    <div class="mb-6">
-      <h2 class="text-xl sm:text-2xl font-bold text-[#1D2025]">Что означают значки на приборной панели</h2>
-      <p class="text-sm text-[#595D66] mt-1">
-        Нажмите на загоревшийся индикатор, чтобы узнать причину и совет мастера — можно ли доехать своим ходом или лучше вызвать эвакуатор.
-      </p>
-    </div>
-
-    <!-- Реалистичная тёмная приборная панель -->
-    <div class="bg-[#1D2025] text-white border border-[#32363F] rounded overflow-hidden">
-      <!-- Верхняя шкала панели -->
-      <div class="px-4 py-2.5 bg-[#15171B] border-b border-[#2E323B] flex items-center justify-between text-xs text-gray-400">
-        <span>Индикаторы приборной панели гибридного автомобиля</span>
-        <span class="font-mono text-gray-300">Выберите значок</span>
-      </div>
-
-      <!-- 4 настоящие автомобильные пиктограммы -->
-      <div class="grid grid-cols-2 lg:grid-cols-4 border-b border-[#2E323B] divide-y sm:divide-y-0 sm:divide-x divide-[#2E323B]">
-        <!-- Значок 1: Красный треугольник -->
-        <button type="button" id="dash-btn-triangle" onclick="selectDashboardSign('triangle')"
-                class="p-4 sm:p-5 text-left bg-[#262A31] transition flex flex-col justify-between gap-3">
-          <div class="w-12 h-12 rounded bg-[#15171B] border border-[#EF4444]/60 flex items-center justify-center">
-            <svg class="w-8 h-8" viewBox="0 0 36 36" fill="none" aria-hidden="true">
-              <path d="M18 5L32 29H4L18 5Z" stroke="#EF4444" stroke-width="2.6" stroke-linejoin="round" />
-              <line x1="18" y1="13" x2="18" y2="21" stroke="#EF4444" stroke-width="2.6" stroke-linecap="round" />
-              <circle cx="18" cy="25" r="1.5" fill="#EF4444" />
-            </svg>
-          </div>
-          <div>
-            <div class="text-xs sm:text-sm font-bold text-white">Красный треугольник с восклицательным знаком</div>
-            <div class="text-[11px] text-[#EF4444] mt-1">Общий сигнал неисправности</div>
-          </div>
-        </button>
-
-        <!-- Значок 2: Жёлтый значок двигателя -->
-        <button type="button" id="dash-btn-engine" onclick="selectDashboardSign('engine')"
-                class="p-4 sm:p-5 text-left bg-[#1D2025] hover:bg-[#24282F] transition flex flex-col justify-between gap-3">
-          <div class="w-12 h-12 rounded bg-[#15171B] border border-[#32363F] flex items-center justify-center">
-            <svg class="w-8 h-8" viewBox="0 0 36 36" fill="none" aria-hidden="true">
-              <path d="M12 10H22M17 10V13M7 16V24M7 20H10M29 15V25M26 20H29M10 14H23L26 17V24H13L10 21V14Z"
-                    stroke="#F59E0B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </div>
-          <div>
-            <div class="text-xs sm:text-sm font-bold text-gray-200">Жёлтый значок двигателя</div>
-            <div class="text-[11px] text-[#F59E0B] mt-1">Ошибка силового агрегата</div>
-          </div>
-        </button>
-
-        <!-- Значок 3: Значок аккумулятора / перегрева батареи -->
-        <button type="button" id="dash-btn-battery" onclick="selectDashboardSign('battery')"
-                class="p-4 sm:p-5 text-left bg-[#1D2025] hover:bg-[#24282F] transition flex flex-col justify-between gap-3">
-          <div class="w-12 h-12 rounded bg-[#15171B] border border-[#32363F] flex items-center justify-center">
-            <svg class="w-8 h-8" viewBox="0 0 36 36" fill="none" aria-hidden="true">
-              <rect x="6" y="12" width="24" height="14" rx="1.5" stroke="#EF4444" stroke-width="2.2" />
-              <rect x="10" y="9" width="4" height="3" fill="#EF4444" />
-              <rect x="22" y="9" width="4" height="3" fill="#EF4444" />
-              <line x1="11" y1="19" x2="15" y2="19" stroke="#EF4444" stroke-width="2" />
-              <line x1="21" y1="19" x2="25" y2="19" stroke="#EF4444" stroke-width="2" />
-              <line x1="23" y1="17" x2="23" y2="21" stroke="#EF4444" stroke-width="2" />
-            </svg>
-          </div>
-          <div>
-            <div class="text-xs sm:text-sm font-bold text-gray-200">Значок аккумулятора / перегрева батареи</div>
-            <div class="text-[11px] text-[#EF4444] mt-1">Заряд или температура ВВБ</div>
-          </div>
-        </button>
-
-        <!-- Значок 4: Значок скользкой дороги / ошибки тормозной системы -->
-        <button type="button" id="dash-btn-brake" onclick="selectDashboardSign('brake')"
-                class="p-4 sm:p-5 text-left bg-[#1D2025] hover:bg-[#24282F] transition flex flex-col justify-between gap-3">
-          <div class="w-12 h-12 rounded bg-[#15171B] border border-[#32363F] flex items-center justify-center">
-            <svg class="w-8 h-8" viewBox="0 0 36 36" fill="none" aria-hidden="true">
-              <!-- Контур автомобиля сверху -->
-              <rect x="12" y="6" width="12" height="12" rx="2.5" stroke="#F59E0B" stroke-width="2" />
-              <line x1="12" y1="11" x2="24" y2="11" stroke="#F59E0B" stroke-width="1.5" />
-              <!-- Следы скольжения -->
-              <path d="M14 21C12 23 16 25 14 28M22 21C20 23 24 25 22 28"
-                    stroke="#F59E0B" stroke-width="2" stroke-linecap="round" />
-            </svg>
-          </div>
-          <div>
-            <div class="text-xs sm:text-sm font-bold text-gray-200">Значок скользкой дороги / тормозной системы</div>
-            <div class="text-[11px] text-[#F59E0B] mt-1">Курсовая устойчивость и тормоза</div>
-          </div>
-        </button>
-      </div>
-
-      <!-- Подробная расшифровка активного индикатора -->
-      <div class="p-5 sm:p-6 bg-[#181A1F]">
-        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <div class="space-y-2 max-w-3xl">
-            <h3 id="dash-detail-title" class="text-base sm:text-lg font-bold text-white">
-              Красный треугольник с восклицательным знаком
-            </h3>
-            <p id="dash-detail-desc" class="text-xs sm:text-sm text-gray-300 leading-relaxed">
-              Сигнализирует о критической ошибке в гибридной установке: перегреве инвертора из-за отказа помпы, просадке элементов высоковольтной батареи, утечке высокого напряжения или падении давления масла в двигателе.
-            </p>
-          </div>
-
-          <div class="lg:w-80 shrink-0 bg-[#23272F] border border-[#353A45] rounded p-3.5">
-            <div class="text-[11px] font-mono text-gray-400 mb-1">Совет мастера:</div>
-            <div id="dash-detail-advice" class="text-xs sm:text-sm font-bold text-[#E05A1B] leading-snug">
-              Если машина теряет тягу или не работает помпа охлаждения — лучше не рисковать и вызвать эвакуатор.
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 6. Интерактивная форма записи на диагностику (без расчёта цены) -->
-  <section id="booking" class="max-w-6xl mx-auto px-4 pb-12">
-    <div class="bg-white border border-[#D6D5D0] rounded overflow-hidden">
-      <!-- Шапка формы + переключатель вкладок -->
-      <div class="p-5 sm:p-6 bg-[#F5F5F3] border-b border-[#D6D5D0] flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h2 class="text-xl sm:text-2xl font-bold text-[#1D2025]">Запись на диагностику</h2>
-          <p class="text-xs sm:text-sm text-[#595D66] mt-1">
-            Выберите способ связи: сформируйте готовую заявку в мессенджер или закажите обратный звонок мастера.
-          </p>
-        </div>
-
-        <!-- Вкладки -->
-        <div class="inline-flex rounded border border-[#D6D5D0] bg-white p-1 self-start md:self-auto">
-          <button type="button" id="tab-messenger" onclick="switchBookingTab('messenger')"
-                  class="px-3.5 py-2 rounded text-xs sm:text-sm font-bold bg-[#1D2025] text-white transition">
-            Заявка в WhatsApp / Telegram
-          </button>
-          <button type="button" id="tab-callback" onclick="switchBookingTab('callback')"
-                  class="px-3.5 py-2 rounded text-xs sm:text-sm font-medium text-[#1D2025] hover:bg-[#F5F5F3] transition">
-            Заказать обратный звонок
-          </button>
-        </div>
-      </div>
-
-      <!-- ВКЛАДКА 1: Заявка в WhatsApp / Telegram -->
-      <div id="booking-panel-messenger" class="p-5 sm:p-6 grid lg:grid-cols-12 gap-6 items-start">
-        <div class="lg:col-span-7 space-y-5">
-          <!-- Выбор модели -->
-          <div>
-            <label class="block text-xs sm:text-sm font-bold text-[#1D2025] mb-2">
-              1. Выберите модель автомобиля
-            </label>
-            <div id="model-buttons" class="flex flex-wrap gap-2">
-              <button type="button" data-model="Toyota Prius (20 / 30 / 50)" onclick="selectCarModel(this)"
-                      class="model-btn px-3 py-1.5 rounded border border-[#1D2025] bg-[#1D2025] text-white text-xs sm:text-sm font-medium transition">
-                Toyota Prius (20 / 30 / 50)
-              </button>
-              <button type="button" data-model="Toyota Camry (40 / 50 / 70)" onclick="selectCarModel(this)"
-                      class="model-btn px-3 py-1.5 rounded border border-[#D6D5D0] bg-white hover:border-[#1D2025] text-[#1D2025] text-xs sm:text-sm transition">
-                Toyota Camry (40 / 50 / 70)
-              </button>
-              <button type="button" data-model="Toyota Aqua / Corolla Fielder" onclick="selectCarModel(this)"
-                      class="model-btn px-3 py-1.5 rounded border border-[#D6D5D0] bg-white hover:border-[#1D2025] text-[#1D2025] text-xs sm:text-sm transition">
-                Toyota Aqua / Corolla Fielder
-              </button>
-              <button type="button" data-model="Toyota Estima / Alphard" onclick="selectCarModel(this)"
-                      class="model-btn px-3 py-1.5 rounded border border-[#D6D5D0] bg-white hover:border-[#1D2025] text-[#1D2025] text-xs sm:text-sm transition">
-                Toyota Estima / Alphard
-              </button>
-              <button type="button" data-model="Lexus RX (400h / 450h)" onclick="selectCarModel(this)"
-                      class="model-btn px-3 py-1.5 rounded border border-[#D6D5D0] bg-white hover:border-[#1D2025] text-[#1D2025] text-xs sm:text-sm transition">
-                Lexus RX (400h / 450h)
-              </button>
-              <button type="button" data-model="Lexus CT200h / ES300h" onclick="selectCarModel(this)"
-                      class="model-btn px-3 py-1.5 rounded border border-[#D6D5D0] bg-white hover:border-[#1D2025] text-[#1D2025] text-xs sm:text-sm transition">
-                Lexus CT200h / ES300h
-              </button>
-              <button type="button" data-model="Другая модель" onclick="selectCarModel(this)"
-                      class="model-btn px-3 py-1.5 rounded border border-[#D6D5D0] bg-white hover:border-[#1D2025] text-[#1D2025] text-xs sm:text-sm transition">
-                Другая модель
-              </button>
-            </div>
-
-            <!-- Поле уточнения модели, если нажата «Другая модель» -->
-            <div id="other-model-wrap" class="hidden mt-2.5">
-              <input type="text" id="other-model-input" oninput="updateOrderPreview()"
-                     placeholder="Укажите марку, модель и год выпуска"
-                     class="w-full h-10 rounded border border-[#D6D5D0] px-3 text-xs sm:text-sm text-[#1D2025] focus:border-[#1D2025] focus:outline-none">
-            </div>
-          </div>
-
-          <!-- Выбор симптомов (можно отметить несколько) -->
-          <div>
-            <label class="block text-xs sm:text-sm font-bold text-[#1D2025] mb-2">
-              2. Отметьте симптомы (можно выбрать несколько)
-            </label>
-            <div class="space-y-2">
-              <label class="flex items-center gap-2.5 p-2.5 rounded border border-[#D6D5D0] hover:bg-[#FAF9F6] cursor-pointer select-none transition">
-                <input type="checkbox" value="Горит ошибка гибридной системы / красный треугольник" checked onchange="updateOrderPreview()"
-                       class="symptom-checkbox w-4 h-4 accent-[#E05A1B] shrink-0">
-                <span class="text-xs sm:text-sm text-[#1D2025]">Горит ошибка гибридной системы / красный треугольник</span>
-              </label>
-
-              <label class="flex items-center gap-2.5 p-2.5 rounded border border-[#D6D5D0] hover:bg-[#FAF9F6] cursor-pointer select-none transition">
-                <input type="checkbox" value="Батарея быстро разряжается" onchange="updateOrderPreview()"
-                       class="symptom-checkbox w-4 h-4 accent-[#E05A1B] shrink-0">
-                <span class="text-xs sm:text-sm text-[#1D2025]">Батарея быстро разряжается</span>
-              </label>
-
-              <label class="flex items-center gap-2.5 p-2.5 rounded border border-[#D6D5D0] hover:bg-[#FAF9F6] cursor-pointer select-none transition">
-                <input type="checkbox" value="Повышенный расход топлива" onchange="updateOrderPreview()"
-                       class="symptom-checkbox w-4 h-4 accent-[#E05A1B] shrink-0">
-                <span class="text-xs sm:text-sm text-[#1D2025]">Повышенный расход топлива</span>
-              </label>
-
-              <label class="flex items-center gap-2.5 p-2.5 rounded border border-[#D6D5D0] hover:bg-[#FAF9F6] cursor-pointer select-none transition">
-                <input type="checkbox" value="Перегрев / не работает помпа охлаждения" onchange="updateOrderPreview()"
-                       class="symptom-checkbox w-4 h-4 accent-[#E05A1B] shrink-0">
-                <span class="text-xs sm:text-sm text-[#1D2025]">Перегрев / не работает помпа охлаждения</span>
-              </label>
-
-              <label class="flex items-center gap-2.5 p-2.5 rounded border border-[#D6D5D0] hover:bg-[#FAF9F6] cursor-pointer select-none transition">
-                <input type="checkbox" value="Проверка перед покупкой авто" onchange="updateOrderPreview()"
-                       class="symptom-checkbox w-4 h-4 accent-[#E05A1B] shrink-0">
-                <span class="text-xs sm:text-sm text-[#1D2025]">Проверка перед покупкой авто</span>
-              </label>
-            </div>
-          </div>
-
-          <!-- Поле комментария или кода ошибки -->
-          <div>
-            <label for="diagnostic-comment" class="block text-xs sm:text-sm font-bold text-[#1D2025] mb-1.5">
-              3. Комментарий или код ошибки, если уже делали диагностику <span class="font-normal text-[#595D66]">(необязательно)</span>
-            </label>
-            <input type="text" id="diagnostic-comment" oninput="updateOrderPreview()"
-                   placeholder="Например: код P0A80 или машина плохо тянет в горку"
-                   class="w-full h-10 rounded border border-[#D6D5D0] px-3 text-xs sm:text-sm text-[#1D2025] focus:border-[#1D2025] focus:outline-none">
-          </div>
-
-          <!-- Выбор времени -->
-          <div>
-            <label class="block text-xs sm:text-sm font-bold text-[#1D2025] mb-2">
-              4. Удобное время визита
-            </label>
-            <div class="grid grid-cols-3 gap-2">
-              <button type="button" data-time="Сегодня" onclick="selectVisitTime(this)"
-                      class="time-btn h-10 px-2 rounded border border-[#1D2025] bg-[#1D2025] text-white text-xs sm:text-sm font-medium transition">
-                Сегодня
-              </button>
-              <button type="button" data-time="Завтра" onclick="selectVisitTime(this)"
-                      class="time-btn h-10 px-2 rounded border border-[#D6D5D0] bg-white hover:border-[#1D2025] text-[#1D2025] text-xs sm:text-sm transition">
-                Завтра
-              </button>
-              <button type="button" data-time="В удобный день (по звонку)" onclick="selectVisitTime(this)"
-                      class="time-btn h-10 px-2 rounded border border-[#D6D5D0] bg-white hover:border-[#1D2025] text-[#1D2025] text-xs sm:text-sm transition">
-                В удобный день
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Правая колонка: Текст заявки и кнопки отправки -->
-        <div class="lg:col-span-5 bg-[#F5F5F3] border border-[#D6D5D0] rounded p-4 sm:p-5 space-y-4">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-[#1D2025]">Сформированный текст заявки</span>
-            <button type="button" onclick="copyBookingText()"
-                    class="text-xs text-[#E05A1B] hover:text-[#C44B12] font-medium underline underline-offset-2">
-              Скопировать
-            </button>
-          </div>
-
-          <pre id="booking-preview" class="bg-white border border-[#D6D5D0] rounded p-3.5 font-mono text-xs text-[#1D2025] whitespace-pre-wrap leading-relaxed"></pre>
-
-          <div class="space-y-2.5">
-            <button type="button" onclick="sendWhatsAppBooking()"
-                    class="w-full h-11 px-4 rounded bg-[#1F8E49] hover:bg-[#19743B] text-white text-sm font-bold flex items-center justify-center gap-2 transition">
-              <span>Отправить заявку в WhatsApp</span>
-            </button>
-
-            <button type="button" onclick="sendTelegramBooking()"
-                    class="w-full h-11 px-4 rounded bg-[#1E78B4] hover:bg-[#186294] text-white text-sm font-bold flex items-center justify-center gap-2 transition">
-              <span>Отправить в Telegram</span>
-            </button>
-          </div>
-
-          <p class="text-[11px] text-[#595D66] leading-relaxed">
-            Мастер получит модель автомобиля и отмеченные симптомы, чтобы назвать свободное окно на диагностику без лишних расспросов.
-          </p>
-        </div>
-      </div>
-
-      <!-- ВКЛАДКА 2: Заказать обратный звонок -->
-      <div id="booking-panel-callback" class="hidden p-5 sm:p-6">
-        <div id="callback-form-wrap" class="max-w-xl space-y-4">
-          <p class="text-xs sm:text-sm text-[#3D414A]">
-            Если неудобно писать в мессенджер — оставьте имя и номер телефона. Мастер перезвонит в рабочее время (<span class="font-mono">Пн–Сб: 09:00 – 19:00</span>) и согласует время заезда в бокс.
-          </p>
-
-          <div class="grid sm:grid-cols-2 gap-3">
-            <div>
-              <label for="cb-name" class="block text-xs font-bold text-[#1D2025] mb-1">Ваше имя</label>
-              <input type="text" id="cb-name" placeholder="Например: Азамат"
-                     class="w-full h-10 rounded border border-[#D6D5D0] px-3 text-sm text-[#1D2025] focus:border-[#1D2025] focus:outline-none">
-            </div>
-            <div>
-              <label for="cb-phone" class="block text-xs font-bold text-[#1D2025] mb-1">Номер телефона</label>
-              <input type="tel" id="cb-phone" placeholder="0555 12 34 56"
-                     class="w-full h-10 rounded border border-[#D6D5D0] px-3 font-mono text-sm text-[#1D2025] focus:border-[#1D2025] focus:outline-none">
-            </div>
-          </div>
-
-          <div>
-            <label for="cb-car" class="block text-xs font-bold text-[#1D2025] mb-1">
-              Модель автомобиля или краткий вопрос <span class="font-normal text-[#595D66]">(необязательно)</span>
-            </label>
-            <input type="text" id="cb-car" placeholder="Например: Toyota Prius 30, горит ошибка на панели"
-                   class="w-full h-10 rounded border border-[#D6D5D0] px-3 text-sm text-[#1D2025] focus:border-[#1D2025] focus:outline-none">
-          </div>
-
-          <div id="cb-error" class="hidden text-xs font-medium text-[#C44B12]">
-            Укажите, пожалуйста, номер телефона, чтобы мастер мог вам перезвонить.
-          </div>
-
-          <div class="pt-1 flex flex-wrap items-center gap-3">
-            <button type="button" onclick="submitCallbackForm()"
-                    class="h-11 px-6 rounded bg-[#E05A1B] hover:bg-[#C44B12] text-white text-sm font-bold transition">
-              Заказать обратный звонок
-            </button>
-            <span class="text-xs text-[#595D66]">Или позвоните напрямую: <a href="tel:+996999515398" class="font-mono font-bold text-[#1D2025] underline">0999 51 53 98</a></span>
-          </div>
-        </div>
-
-        <!-- Экран подтверждения обратного звонка -->
-        <div id="callback-success-wrap" class="hidden max-w-xl bg-[#F5F5F3] border border-[#D6D5D0] rounded p-5 space-y-3">
-          <div class="font-mono text-xs font-bold text-[#1F8E49]" id="cb-ticket-id">Обращение зарегистрировано</div>
-          <h3 class="text-lg font-bold text-[#1D2025]">Заявка на обратный звонок принята</h3>
-          <p id="cb-success-summary" class="text-xs sm:text-sm text-[#3D414A] leading-relaxed"></p>
-          <div class="pt-1 flex flex-wrap gap-2.5">
-            <button type="button" id="cb-wa-duplicate-btn" onclick="duplicateCallbackToWhatsApp()"
-                    class="h-9 px-4 rounded bg-[#1F8E49] hover:bg-[#19743B] text-white text-xs font-bold transition">
-              Продублировать в WhatsApp
-            </button>
-            <button type="button" onclick="resetCallbackForm()"
-                    class="h-9 px-4 rounded border border-[#D6D5D0] bg-white hover:bg-[#F5F5F3] text-xs font-medium text-[#1D2025] transition">
-              Изменить данные
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 7. Подвал -->
-  <footer class="bg-[#1D2025] text-gray-300 border-t border-[#2E323B]">
-    <div class="max-w-6xl mx-auto px-4 py-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-      <div class="space-y-1.5">
-        <div class="text-base sm:text-lg font-bold text-white">
-          Hybrid Doctor — Ремонт гибридов в Бишкеке
-        </div>
-        <div class="text-xs text-gray-400">
-          Диагностика, восстановление высоковольтных батарей, ремонт инверторов и обслуживание тормозных систем • Пн–Сб: 09:00 – 19:00
-        </div>
       </div>
 
       <div class="flex flex-wrap items-center gap-3">
-        <a href="tel:+996999515398" class="font-mono text-lg font-bold text-white hover:text-[#E05A1B] tabular-nums mr-2 transition">
-          0999 51 53 98
-        </a>
-        <a href="https://wa.me/996999515398?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%9D%D1%83%D0%B6%D0%BD%D0%B0%20%D0%B4%D0%B8%D0%B0%D0%B3%D0%BD%D0%BE%D1%81%D1%82%D0%B8%D0%BA%D0%B0%20%D0%B3%D0%B8%D0%B1%D1%80%D0%B8%D0%B4%D0%B0%20%D0%B2%20%D0%91%D0%B8%D1%88%D0%BA%D0%B5%D0%BA%D0%B5."
+        <!-- Чекбокс учёта Trade-In -->
+        <label class="inline-flex items-center gap-2 bg-white border border-[#DCE0E6] px-3 py-2 rounded-md cursor-pointer select-none hover:border-cobalt-600 transition">
+          <input type="checkbox" id="toggle-tradein-prices" checked onchange="toggleTradeInPrices()"
+                 class="w-4 h-4 accent-[#0047AB] rounded-xs">
+          <span class="text-xs sm:text-sm font-semibold text-asphalt">Цена со сдачей старого АКБ</span>
+        </label>
+
+        <!-- Переключатель вида: Карточки / Прайс-лист -->
+        <div class="inline-flex rounded-md border border-[#DCE0E6] bg-white p-0.5" role="group" aria-label="Вид отображения каталога">
+          <button type="button" id="view-cards-btn" onclick="setCatalogView('cards')"
+                  class="px-3 py-1.5 rounded text-xs font-bold bg-cobalt-600 text-white transition">
+            Карточки
+          </button>
+          <button type="button" id="view-table-btn" onclick="setCatalogView('table')"
+                  class="px-3 py-1.5 rounded text-xs font-semibold text-gray-600 hover:text-asphalt transition">
+            Прайс-лист
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Режим 1: Сетка карточек (4 колонки) -->
+    <div id="products-grid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+
+    <!-- Режим 2: Технический прайс-лист (таблица) -->
+    <div id="products-table-wrap" class="hidden bg-white border border-[#DCE0E6] rounded-lg overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-[#F4F5F7] border-b border-[#DCE0E6] text-[11px] font-bold uppercase tracking-wider text-gray-500">
+              <th class="py-3 px-4">Артикул / Модель</th>
+              <th class="py-3 px-3">Бренд</th>
+              <th class="py-3 px-3">Стандарт и габариты</th>
+              <th class="py-3 px-3">Ёмкость / Ток</th>
+              <th class="py-3 px-3">Полярность</th>
+              <th class="py-3 px-3">Гарантия</th>
+              <th class="py-3 px-4 text-right">Цена</th>
+              <th class="py-3 px-4 text-right">Заказ</th>
+            </tr>
+          </thead>
+          <tbody id="products-table-body" class="divide-y divide-[#DCE0E6] text-xs sm:text-sm"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Пустой результат -->
+    <div id="empty-state" class="hidden bg-white border border-[#DCE0E6] rounded-lg p-8 text-center">
+      <div class="text-base font-bold text-asphalt">По выбранным фильтрам аккумуляторов не найдено</div>
+      <p class="text-xs sm:text-sm text-gray-500 mt-1 max-w-md mx-auto">
+        На складе в Бишкеке более 250 наименований. Сбросьте фильтры или отправьте модель авто в WhatsApp.
+      </p>
+      <div class="mt-4 flex flex-wrap justify-center gap-2.5">
+        <button type="button" onclick="resetFilters()" class="h-9 px-4 rounded-md bg-cobalt-600 hover:bg-cobalt-700 text-white text-xs font-semibold transition">
+          Сбросить все фильтры
+        </button>
+        <a href="https://wa.me/996556157110?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%20%D0%BF%D0%BE%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D1%8E%20%D0%90%D0%9A%D0%91%20%D0%B2%20%D0%91%D0%B8%D1%88%D0%BA%D0%B5%D0%BA%D0%B5."
            target="_blank" rel="noopener"
-           class="h-9 px-3.5 rounded bg-[#1F8E49] hover:bg-[#19743B] text-white text-xs font-medium inline-flex items-center transition">
-          WhatsApp
+           class="h-9 px-4 rounded-md bg-[#16A34A] hover:bg-[#15803D] text-white text-xs font-semibold inline-flex items-center transition">
+          Уточнить наличие в WhatsApp
         </a>
-        <a href="https://t.me/+996999515398"
-           target="_blank" rel="noopener"
-           class="h-9 px-3.5 rounded bg-[#1E78B4] hover:bg-[#186294] text-white text-xs font-medium inline-flex items-center transition">
-          Telegram
+      </div>
+    </div>
+  </main>
+
+  <!-- Секция приёма Б/У АКБ и UPS -->
+  <section id="trade-in" class="bg-white border-y border-[#DCE0E6] py-10">
+    <div class="max-w-7xl mx-auto px-4 grid lg:grid-cols-12 gap-8 items-start">
+      <div class="lg:col-span-7 space-y-4">
+        <div class="inline-block px-2.5 py-1 rounded bg-amber-100 text-amber-900 text-xs font-bold uppercase tracking-wide">
+          Приём отработанных батарей
+        </div>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-asphalt">Приём Б/У аккумуляторов и батарей от UPS в Бишкеке</h2>
+        <p class="text-sm text-gray-600 leading-relaxed">
+          Принимаем старые свинцово-кислотные и гелевые аккумуляторы от легковых, грузовых автомобилей и источников бесперебойного питания (UPS / ИБП). При покупке нового АКБ сумма выкупа сразу вычитается из стоимости заказа.
+        </p>
+
+        <!-- Таблица расценок приёма -->
+        <div class="border border-[#DCE0E6] rounded-md overflow-hidden">
+          <table class="w-full text-left text-xs sm:text-sm">
+            <thead class="bg-[#F4F5F7] border-b border-[#DCE0E6] text-gray-600 font-bold">
+              <tr>
+                <th class="py-2.5 px-3.5">Тип / ёмкость старого АКБ</th>
+                <th class="py-2.5 px-3.5 text-right">Скидка при обмене</th>
+                <th class="py-2.5 px-3.5 text-right">Выкуп наличными</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#DCE0E6]">
+              <tr>
+                <td class="py-2.5 px-3.5 font-medium text-asphalt">Батареи от UPS / ИБП (7 – 18 А·ч)</td>
+                <td class="py-2.5 px-3.5 text-right font-mono font-semibold text-cobalt-600">150 – 300 сом</td>
+                <td class="py-2.5 px-3.5 text-right font-mono text-gray-600">100 – 250 сом</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-3.5 font-medium text-asphalt">Легковые 45 – 60 А·ч</td>
+                <td class="py-2.5 px-3.5 text-right font-mono font-semibold text-cobalt-600">до 800 сом</td>
+                <td class="py-2.5 px-3.5 text-right font-mono text-gray-600">до 700 сом</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-3.5 font-medium text-asphalt">Легковые 62 – 77 А·ч</td>
+                <td class="py-2.5 px-3.5 text-right font-mono font-semibold text-cobalt-600">до 1 100 сом</td>
+                <td class="py-2.5 px-3.5 text-right font-mono text-gray-600">до 950 сом</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-3.5 font-medium text-asphalt">Джипы / бусы 80 – 110 А·ч</td>
+                <td class="py-2.5 px-3.5 text-right font-mono font-semibold text-cobalt-600">до 1 500 сом</td>
+                <td class="py-2.5 px-3.5 text-right font-mono text-gray-600">до 1 300 сом</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-3.5 font-medium text-asphalt">Грузовые и тяговые 140 – 225 А·ч</td>
+                <td class="py-2.5 px-3.5 text-right font-mono font-semibold text-cobalt-600">до 2 200 сом</td>
+                <td class="py-2.5 px-3.5 text-right font-mono text-gray-600">до 2 000 сом</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Быстрый калькулятор сдачи партии Б/У АКБ -->
+      <div class="lg:col-span-5 bg-[#F4F5F7] border border-[#DCE0E6] rounded-lg p-5 space-y-4">
+        <h3 class="text-base font-extrabold text-asphalt">Быстрая оценка сдачи Б/У АКБ</h3>
+        <p class="text-xs text-gray-600">Укажите ёмкость и количество старых аккумуляторов для расчёта ориентировочной суммы:</p>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="scrap-rate" class="block text-[11px] font-bold uppercase text-gray-500 mb-1">Ёмкость АКБ</label>
+            <select id="scrap-rate" onchange="calcScrap()"
+                    class="w-full h-10 rounded-md border border-[#DCE0E6] bg-white px-2.5 text-xs sm:text-sm font-medium">
+              <option value="200">UPS 7–18 А·ч (~200 сом)</option>
+              <option value="750" selected>45–60 А·ч (~750 сом)</option>
+              <option value="1050">62–77 А·ч (~1 050 сом)</option>
+              <option value="1400">80–110 А·ч (~1 400 сом)</option>
+              <option value="2100">140–225 А·ч (~2 100 сом)</option>
+            </select>
+          </div>
+          <div>
+            <label for="scrap-qty" class="block text-[11px] font-bold uppercase text-gray-500 mb-1">Количество, шт.</label>
+            <input type="number" id="scrap-qty" min="1" max="100" value="1" oninput="calcScrap()"
+                   class="w-full h-10 rounded-md border border-[#DCE0E6] bg-white px-3 font-mono text-sm font-bold">
+          </div>
+        </div>
+
+        <div class="bg-white border border-[#DCE0E6] rounded-md p-3.5 flex items-center justify-between">
+          <span class="text-xs font-semibold text-gray-600">Предварительная оценка:</span>
+          <span id="scrap-total" class="font-mono text-lg font-bold text-asphalt tabular-nums">750 сом</span>
+        </div>
+
+        <button type="button" onclick="sendScrapWhatsApp()"
+                class="w-full h-10 rounded-md bg-[#16A34A] hover:bg-[#15803D] text-white text-xs sm:text-sm font-semibold transition">
+          Отправить расчёт в WhatsApp
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Услуги и сервис -->
+  <section id="services" class="max-w-7xl mx-auto px-4 py-10">
+    <h2 class="text-xl sm:text-2xl font-extrabold text-asphalt mb-5">Услуги автосервиса</h2>
+    <div class="grid md:grid-cols-2 gap-4">
+      <div class="bg-white border border-[#DCE0E6] rounded-lg p-5 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-cobalt-600">Выездной сервис</span>
+            <span class="px-2 py-0.5 rounded bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold">Бесплатно при покупке АКБ</span>
+          </div>
+          <h3 class="text-lg font-extrabold text-asphalt">Установка АКБ и диагностика электрооборудования</h3>
+          <p class="text-sm text-gray-600 mt-2 leading-relaxed">
+            Зачищаем клеммы, устанавливаем аккумулятор с подачей резервного питания (чтобы не сбросились настройки ЭБУ и радио), проверяем зарядку генератора на холостом ходу и под нагрузкой, а также ток утечки в режиме сна.
+          </p>
+        </div>
+        <div class="mt-4 pt-3 border-t border-[#DCE0E6] text-xs text-gray-500 font-mono">
+          Норма заряда генератора: 13.8V – 14.4V
+        </div>
+      </div>
+
+      <div class="bg-white border border-[#DCE0E6] rounded-lg p-5 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-cobalt-600">Обслуживание климата</span>
+            <span class="px-2 py-0.5 rounded bg-amber-50 border border-amber-200 text-amber-900 font-mono text-xs font-bold">Фреон R134a</span>
+          </div>
+          <h3 class="text-lg font-extrabold text-asphalt">Заправка автокондиционера в Бишкеке</h3>
+          <p class="text-sm text-gray-600 mt-2 leading-relaxed">
+            Проверка герметичности контура, вакуумирование системы для удаления влаги и воздуха, точная заправка хладагентом R134a по весам с добавлением синтетического компрессорного масла.
+          </p>
+        </div>
+        <div class="mt-4 pt-3 border-t border-[#DCE0E6] flex items-center justify-between">
+          <span class="text-xs text-gray-500">Запись на удобное время (09:00–18:00)</span>
+          <a href="https://wa.me/996556157110?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%B5%D1%81%D1%83%D0%B5%D1%82%20%D0%B7%D0%B0%D0%BF%D1%80%D0%B0%D0%B2%D0%BA%D0%B0%20%D0%B0%D0%B2%D1%82%D0%BE%D0%BA%D0%BE%D0%BD%D0%B4%D0%B8%D1%86%D0%B8%D0%BE%D0%BD%D0%B5%D1%80%D0%B0%20%D0%B2%20%D0%91%D0%B8%D1%88%D0%BA%D0%B5%D0%BA%D0%B5."
+             target="_blank" rel="noopener"
+             class="text-xs font-bold text-[#16A34A] hover:underline">
+            Записаться через WhatsApp →
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Доставка, оплата и гарантия -->
+  <section id="delivery" class="max-w-7xl mx-auto px-4 pb-12">
+    <div class="bg-white border border-[#DCE0E6] rounded-lg p-5 sm:p-6">
+      <h2 class="text-lg sm:text-xl font-extrabold text-asphalt mb-4">Доставка, оплата и гарантия</h2>
+      <div class="grid md:grid-cols-3 gap-6 text-sm">
+        <div>
+          <div class="font-bold text-asphalt mb-1">Доставка по Бишкеку</div>
+          <p class="text-xs sm:text-sm text-gray-600 leading-relaxed">
+            Оперативная доставка по городу ежедневно с <span class="font-mono">09:00</span> до <span class="font-mono">18:00</span>. Возможен самовывоз со склада после предварительного резерва по телефону.
+          </p>
+        </div>
+        <div>
+          <div class="font-bold text-asphalt mb-1">Способы оплаты</div>
+          <p class="text-xs sm:text-sm text-gray-600 leading-relaxed">
+            Оплата после проверки и установки: наличными курьеру, переводом через МБанк, О!Деньги, Balance, а также безналичный расчёт с закрывающими документами для ОсОО и ИП.
+          </p>
+        </div>
+        <div>
+          <div class="font-bold text-asphalt mb-1">Гарантийные обязательства</div>
+          <p class="text-xs sm:text-sm text-gray-600 leading-relaxed">
+            На все аккумуляторы оформляется фирменный гарантийный талон сроком от 12 до 24 месяцев и предоставляются сертификаты соответствия.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Футер -->
+  <footer id="contacts" class="bg-[#121417] text-gray-400 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 py-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-6 text-xs">
+      <div>
+        <div class="text-white font-extrabold text-base">АВТО АКБ</div>
+        <p class="mt-2 leading-relaxed">
+          Продажа автомобильных, грузовых, мотоциклетных и гелевых аккумуляторов с доставкой по г. Бишкек. Приём Б/У АКБ и UPS.
+        </p>
+      </div>
+      <div>
+        <div class="text-white font-bold uppercase tracking-wider mb-2.5">Разделы</div>
+        <ul class="space-y-1.5">
+          <li><a href="#catalog" class="hover:text-white transition">Каталог аккумуляторов</a></li>
+          <li><a href="#trade-in" class="hover:text-white transition">Приём Б/У АКБ и UPS</a></li>
+          <li><a href="#services" class="hover:text-white transition">Заправка автокондиционера</a></li>
+          <li><a href="#delivery" class="hover:text-white transition">Доставка, оплата и гарантия</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="text-white font-bold uppercase tracking-wider mb-2.5">Бренды в каталоге</div>
+        <p class="leading-relaxed">
+          Bosch, Varta, Exide, Gigawatt, Akom, Bost, Reactor, Gladiator, Tenax, Platin, Ataka, Bolk, Cobat.
+        </p>
+      </div>
+      <div>
+        <div class="text-white font-bold uppercase tracking-wider mb-2.5">Контакты</div>
+        <a href="tel:+996556157110" class="font-mono text-lg font-bold text-white hover:text-amber-400 transition block tabular-nums">0 (556) 157-110</a>
+        <div class="mt-1">г. Бишкек • Ежедневно с 09:00 до 18:00</div>
+        <a href="https://wa.me/996556157110" target="_blank" rel="noopener"
+           class="inline-flex items-center gap-1.5 mt-3 px-3.5 py-2 rounded-md bg-[#16A34A] hover:bg-[#15803D] text-white font-semibold transition">
+          Написать в WhatsApp
         </a>
       </div>
     </div>
   </footer>
 
-  <!-- Закреплённая панель на мобильном экране -->
-  <div class="fixed bottom-0 inset-x-0 z-40 bg-white border-t border-[#D6D5D0] p-2 flex gap-2 md:hidden">
-    <a href="tel:+996999515398"
-       class="flex-1 h-10 rounded bg-[#1D2025] text-white text-xs font-bold flex items-center justify-center">
-      Позвонить
+  <!-- Фиксированная нижняя панель для мобильных -->
+  <div class="fixed bottom-0 inset-x-0 z-40 bg-white border-t border-[#DCE0E6] p-2 flex gap-2 md:hidden">
+    <a href="tel:+996556157110"
+       class="flex-1 h-10 rounded-md bg-cobalt-600 text-white text-xs font-bold flex items-center justify-center">
+      Позвонить 0 (556) 157-110
     </a>
-    <a href="https://wa.me/996999515398?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%9D%D1%83%D0%B6%D0%BD%D0%B0%20%D0%B4%D0%B8%D0%B0%D0%B3%D0%BD%D0%BE%D1%81%D1%82%D0%B8%D0%BA%D0%B0%20%D0%B3%D0%B8%D0%B1%D1%80%D0%B8%D0%B4%D0%B0%20%D0%B2%20%D0%91%D0%B8%D1%88%D0%BA%D0%B5%D0%BA%D0%B5."
+    <a href="https://wa.me/996556157110?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%9D%D1%83%D0%B6%D0%B5%D0%BD%20%D0%BF%D0%BE%D0%B4%D0%B1%D0%BE%D1%80%20%D0%B0%D0%BA%D0%BA%D1%83%D0%BC%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20%D0%B2%20%D0%91%D0%B8%D1%88%D0%BA%D0%B5%D0%BA%D0%B5."
        target="_blank" rel="noopener"
-       class="flex-1 h-10 rounded bg-[#1F8E49] text-white text-xs font-bold flex items-center justify-center">
+       class="flex-1 h-10 rounded-md bg-[#16A34A] text-white text-xs font-bold flex items-center justify-center">
       WhatsApp
     </a>
   </div>
 
+  <!-- Модальное окно оформления заказа -->
+  <div id="order-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 p-4" onclick="closeModalBackdrop(event)">
+    <div class="bg-white border border-[#DCE0E6] rounded-lg max-w-md w-full p-5 shadow-xl relative">
+      <button type="button" onclick="closeOrderModal()" aria-label="Закрыть"
+              class="w-8 h-8 rounded-md border border-[#DCE0E6] hover:bg-gray-100 text-gray-600 text-sm font-bold flex items-center justify-center absolute right-4 top-4">
+        ✕
+      </button>
+
+      <!-- Шаг 1: Форма заказа -->
+      <div id="modal-step-form">
+        <div class="font-mono text-[11px] font-semibold text-gray-500 uppercase" id="modal-sku">АРТ. BOS-S4-005</div>
+        <h3 id="modal-title" class="text-lg font-extrabold text-asphalt mt-0.5 pr-8">BOSCH S4 Silver 60 А·ч</h3>
+        <div id="modal-specs" class="text-xs text-gray-500 mt-1">Европа (DIN) • Обратная [- +] • 242×175×190 мм</div>
+
+        <!-- Детализация цены -->
+        <div class="mt-4 bg-[#F4F5F7] border border-[#DCE0E6] rounded-md p-3 space-y-1.5 text-xs">
+          <div class="flex justify-between text-gray-600">
+            <span>Базовая цена АКБ:</span>
+            <span id="modal-base-price" class="font-mono tabular-nums">7 800 сом</span>
+          </div>
+          <div id="modal-discount-row" class="flex justify-between text-emerald-700 font-semibold">
+            <span>Скидка за сдачу старого АКБ:</span>
+            <span id="modal-discount-val" class="font-mono tabular-nums">−800 сом</span>
+          </div>
+          <div class="pt-1.5 border-t border-[#DCE0E6] flex justify-between items-baseline">
+            <span class="font-bold text-asphalt text-sm">Итого к оплате:</span>
+            <span id="modal-net-price" class="font-mono text-lg font-extrabold text-asphalt tabular-nums">7 000 сом</span>
+          </div>
+        </div>
+
+        <div class="mt-4 space-y-3">
+          <div>
+            <label class="block text-xs font-bold text-asphalt mb-1">Способ получения</label>
+            <div class="grid grid-cols-2 gap-2">
+              <button type="button" id="delivery-type-courier" onclick="setDeliveryMethod('Доставка по Бишкеку')"
+                      class="h-9 rounded-md border border-cobalt-600 bg-cobalt-50 text-cobalt-700 text-xs font-bold transition">
+                Доставка по Бишкеку
+              </button>
+              <button type="button" id="delivery-type-pickup" onclick="setDeliveryMethod('Самовывоз со склада')"
+                      class="h-9 rounded-md border border-[#DCE0E6] bg-white text-gray-700 text-xs font-semibold transition">
+                Самовывоз
+              </button>
+            </div>
+          </div>
+
+          <div id="address-field-wrap">
+            <label for="modal-address" class="block text-xs font-bold text-asphalt mb-1">Адрес или ориентир в Бишкеке</label>
+            <input type="text" id="modal-address" placeholder="Например: мкр. Джал-23 или пересечение Чуй / Советская"
+                   class="w-full h-9 rounded-md border border-[#DCE0E6] px-3 text-xs sm:text-sm focus:border-cobalt-600 focus:outline-none">
+          </div>
+
+          <div class="grid grid-cols-2 gap-2.5">
+            <div>
+              <label for="modal-phone" class="block text-xs font-bold text-asphalt mb-1">Ваш телефон</label>
+              <input type="tel" id="modal-phone" placeholder="0 (555) 12-34-56"
+                     class="w-full h-9 rounded-md border border-[#DCE0E6] px-3 font-mono text-xs sm:text-sm focus:border-cobalt-600 focus:outline-none">
+            </div>
+            <div>
+              <label for="modal-pay" class="block text-xs font-bold text-asphalt mb-1">Оплата</label>
+              <select id="modal-pay" class="w-full h-9 rounded-md border border-[#DCE0E6] px-2 text-xs font-medium bg-white focus:border-cobalt-600 focus:outline-none">
+                <option value="Наличные при получении">Наличные</option>
+                <option value="Перевод МБанк">МБанк</option>
+                <option value="О!Деньги / Balance">О!Деньги</option>
+                <option value="Безнал (ОсОО / ИП)">Безнал (ОсОО/ИП)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <button type="button" onclick="submitDemoOrder()"
+                  class="h-10 px-4 rounded-md bg-cobalt-600 hover:bg-cobalt-700 text-white text-xs sm:text-sm font-semibold transition">
+            Подтвердить заказ
+          </button>
+          <button type="button" onclick="submitWhatsAppOrder()"
+                  class="h-10 px-4 rounded-md bg-[#16A34A] hover:bg-[#15803D] text-white text-xs sm:text-sm font-semibold transition">
+            Оформить через WhatsApp
+          </button>
+        </div>
+      </div>
+
+      <!-- Шаг 2: Экран подтверждения заказа -->
+      <div id="modal-step-done" class="hidden space-y-3 py-2">
+        <div class="inline-block px-2.5 py-1 rounded bg-emerald-50 border border-emerald-200 text-emerald-800 font-mono text-xs font-bold" id="order-number-badge">
+          ЗАКАЗ #AKB-408
+        </div>
+        <h3 class="text-lg font-extrabold text-asphalt">Заявка принята в обработку</h3>
+        <p id="modal-done-summary" class="text-xs sm:text-sm text-gray-600 leading-relaxed"></p>
+        <div class="pt-2 flex flex-col sm:flex-row gap-2">
+          <button type="button" onclick="submitWhatsAppOrder()"
+                  class="flex-1 h-10 px-4 rounded-md bg-[#16A34A] hover:bg-[#15803D] text-white text-xs font-semibold transition">
+            Открыть чат в WhatsApp
+          </button>
+          <button type="button" onclick="closeOrderModal()"
+                  class="h-10 px-4 rounded-md border border-[#DCE0E6] hover:bg-gray-50 text-xs font-semibold text-asphalt transition">
+            Закрыть
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // Данные для интерактивной схемы узлов гибридного автомобиля
-    const SCHEMATIC_NODES = {
-      battery: {
-        num: '01 / 04',
-        title: '1. Высоковольтная батарея в задней части',
-        symptoms: 'Заряд на экране быстро доходит до максимума и за пару минут падает до двух делений, загорается ошибка гибридной системы на приборной панели, увеличивается расход бензина.',
-        check: 'Подключаем профильный сканер, смотрим разброс напряжения по парам элементов под нагрузкой, проверяем состояние медных контактов и чистоту вентилятора охлаждения.',
-        defaultSymptom: 'Батарея быстро разряжается'
+    // Каталог позиций с реальными брендами и техническими параметрами
+    const PRODUCTS = [
+      {
+        id: 1,
+        sku: 'BOS-S4-005',
+        brand: 'Bosch',
+        name: 'BOSCH S4 Silver 60 А·ч',
+        category: 'car',
+        capacity: 60,
+        capGroup: '45-60',
+        cca: 540,
+        dimensions: '242×175×190 мм',
+        standard: 'Европа (DIN)',
+        polarity: 'Обратная [- +]',
+        warranty: '24 мес.',
+        price: 7800,
+        carTags: ['kia', 'euro'],
+        fitment: 'VW Polo/Passat, Skoda Octavia, Kia Rio, Hyundai Solaris',
+        visual: { body: '#D1D5DB', lid: '#0047AB', stripe: '#DC2626', text: '#FFFFFF', sub: '#DBEAFE' }
       },
-      inverter: {
-        num: '02 / 04',
-        title: '2. Инвертор под капотом',
-        symptoms: 'Машина переходит в аварийный режим, пропадает тяга электромотора, появляется ошибка гибридной системы на приборной панели при резком разгоне или в жару.',
-        check: 'Считываем коды неисправностей силовой электроники, проверяем температурные датчики транзисторов, состояние разъёмов и работу контура охлаждения инвертора.',
-        defaultSymptom: 'Горит ошибка гибридной системы / красный треугольник'
+      {
+        id: 2,
+        sku: 'VAR-D47-060',
+        brand: 'Varta',
+        name: 'VARTA Blue Dynamic D47 60 А·ч',
+        category: 'car',
+        capacity: 60,
+        capGroup: '45-60',
+        cca: 540,
+        dimensions: '232×173×225 мм',
+        standard: 'Азия (JIS)',
+        polarity: 'Обратная [- +]',
+        warranty: '24 мес.',
+        price: 8100,
+        carTags: ['camry', 'kia'],
+        fitment: 'Toyota Camry, Corolla, RAV4, Honda Accord, Mazda 6',
+        visual: { body: '#E5E7EB', lid: '#1D4ED8', stripe: '#93C5FD', text: '#FFFFFF', sub: '#E0F2FE' }
       },
-      pump: {
-        num: '03 / 04',
-        title: '3. Помпа охлаждения гибридной установки',
-        symptoms: 'Отсутствует характерное движение жидкости в расширительном бачке инвертора, система перегревается в пробках и на подъёмах, автомобиль ограничивает мощность.',
-        check: 'Проверяем питание и производительность электрической помпы, осматриваем контур на наличие воздушных пробок и оцениваем состояние антифриза.',
-        defaultSymptom: 'Перегрев / не работает помпа охлаждения'
+      {
+        id: 3,
+        sku: 'EXI-EA640',
+        brand: 'Exide',
+        name: 'EXIDE Premium EA640 64 А·ч',
+        category: 'car',
+        capacity: 64,
+        capGroup: '61-77',
+        cca: 640,
+        dimensions: '242×175×190 мм',
+        standard: 'Европа (DIN)',
+        polarity: 'Обратная [- +]',
+        warranty: '24 мес.',
+        price: 8600,
+        carTags: ['euro', 'kia'],
+        fitment: 'BMW 3/5, Mercedes C/E-Class, Audi A4/A6, Subaru Legacy',
+        visual: { body: '#1F2937', lid: '#111827', stripe: '#DC2626', text: '#FFFFFF', sub: '#FCA5A5' }
       },
-      engine: {
-        num: '04 / 04',
-        title: '4. Двигатель и планетарная передача',
-        symptoms: 'Двигатель внутреннего сгорания работает без остановки даже на стоянке, ощущаются толчки при запуске бензинового мотора или повышенный расход топлива.',
-        check: 'Проверяем топливные коррекции, систему зажигания, зарядный ток от мотор-генератора и отсутствие посторонних шумов в планетарном редукторе.',
-        defaultSymptom: 'Повышенный расход топлива'
-      }
-    };
-
-    // Данные для блока расшифровки значков приборной панели
-    const DASHBOARD_SIGNS = {
-      triangle: {
-        title: 'Красный треугольник с восклицательным знаком',
-        desc: 'Сигнализирует о критической ошибке в гибридной установке: перегреве инвертора из-за отказа помпы, просадке элементов высоковольтной батареи, утечке высокого напряжения или падении давления масла в двигателе.',
-        advice: 'Если машина теряет тягу или не работает помпа охлаждения — лучше не рисковать и вызвать эвакуатор.'
+      {
+        id: 4,
+        sku: 'AKM-EFB-065',
+        brand: 'Akom',
+        name: 'AKOM + EFB 65 А·ч',
+        category: 'car',
+        capacity: 65,
+        capGroup: '61-77',
+        cca: 670,
+        dimensions: '242×175×190 мм',
+        standard: 'Европа (DIN)',
+        polarity: 'Обратная [- +]',
+        warranty: '24 мес.',
+        price: 6900,
+        carTags: ['euro', 'kia'],
+        fitment: 'Усиленный ресурс для городского цикла и такси',
+        visual: { body: '#1F2937', lid: '#1E40AF', stripe: '#EAB308', text: '#FFFFFF', sub: '#FDE047' }
       },
-      engine: {
-        title: 'Жёлтый значок двигателя',
-        desc: 'Указывает на сбой в работе бензинового двигателя, датчиков кислорода, клапана рециркуляции газов или системы зажигания. В гибридном авто неисправность двигателя напрямую мешает нормальной зарядке батареи.',
-        advice: 'Если двигатель работает ровно и нет посторонних стуков — можно осторожно доехать до мастерской своим ходом.'
+      {
+        id: 5,
+        sku: 'BST-95D26L',
+        brand: 'Bost',
+        name: 'BOST 95D26L 80 А·ч (Корея)',
+        category: 'car',
+        capacity: 80,
+        capGroup: '78-110',
+        cca: 680,
+        dimensions: '260×173×225 мм',
+        standard: 'Азия (JIS)',
+        polarity: 'Обратная [- +]',
+        warranty: '18 мес.',
+        price: 8900,
+        carTags: ['camry', 'suv', 'kia'],
+        fitment: 'Toyota Land Cruiser Prado, Highlander, Lexus RX, Kia Sorento',
+        visual: { body: '#1E293B', lid: '#B45309', stripe: '#F59E0B', text: '#FFFFFF', sub: '#FEF3C7' }
       },
-      battery: {
-        title: 'Значок аккумулятора / перегрева высоковольтной батареи',
-        desc: 'Появляется при критическом снижении ёмкости модулей высоковольтной батареи, обрыве измерительных контактов или перегреве ячеек из-за забитого пылью вентилятора охлаждения.',
-        advice: 'Не выключайте зажигание вдали от сервиса — при глубоком разряде электроника может заблокировать повторный запуск.'
+      {
+        id: 6,
+        sku: 'RCT-750-075',
+        brand: 'Reactor',
+        name: 'REACTOR 750 75 А·ч',
+        category: 'car',
+        capacity: 75,
+        capGroup: '61-77',
+        cca: 750,
+        dimensions: '278×175×190 мм',
+        standard: 'Европа (DIN)',
+        polarity: 'Обратная [- +]',
+        warranty: '18 мес.',
+        price: 7400,
+        carTags: ['euro', 'suv'],
+        fitment: 'Дизельные и бензиновые двигатели 2.2 – 3.5 л',
+        visual: { body: '#18181B', lid: '#EAB308', stripe: '#EAB308', text: '#FEF08A', sub: '#FFFFFF' }
       },
-      brake: {
-        title: 'Значок скользкой дороги / ошибки тормозной системы',
-        desc: 'Говорит о неисправности электронного блока управления тормозами, падении давления в гидроаккумуляторе или сбое датчиков скорости колёс, из-за чего отключается рекуперативное торможение.',
-        advice: 'Тормоза становятся жёсткими и работают без усиления — двигайтесь на минимальной скорости или вызовите эвакуатор.'
+      {
+        id: 7,
+        sku: 'GIG-045-JIS',
+        brand: 'Gigawatt',
+        name: 'GIGAWATT 45 А·ч (тонкие клеммы)',
+        category: 'car',
+        capacity: 45,
+        capGroup: '45-60',
+        cca: 330,
+        dimensions: '238×129×227 мм',
+        standard: 'Азия (JIS)',
+        polarity: 'Обратная [- +]',
+        warranty: '18 мес.',
+        price: 5400,
+        carTags: ['fit', 'daewoo'],
+        fitment: 'Honda Fit, Stepwgn, Toyota Vitz, Yaris, Ist, Daewoo Matiz',
+        visual: { body: '#F1F5F9', lid: '#1E3A8A', stripe: '#0284C7', text: '#FFFFFF', sub: '#BAE6FD' }
+      },
+      {
+        id: 8,
+        sku: 'GLD-100-DIN',
+        brand: 'Gladiator',
+        name: 'GLADIATOR 100 А·ч',
+        category: 'car',
+        capacity: 100,
+        capGroup: '78-110',
+        cca: 850,
+        dimensions: '353×175×190 мм',
+        standard: 'Европа (DIN)',
+        polarity: 'Обратная [- +]',
+        warranty: '18 мес.',
+        price: 9600,
+        carTags: ['euro', 'suv'],
+        fitment: 'Mercedes Sprinter, BMW X5, Land Cruiser 200, VW Touareg',
+        visual: { body: '#E5E7EB', lid: '#DC2626', stripe: '#B91C1C', text: '#FFFFFF', sub: '#FECACA' }
+      },
+      {
+        id: 9,
+        sku: 'TNX-190-HD',
+        brand: 'Tenax',
+        name: 'TENAX Heavy Duty 190 А·ч',
+        category: 'truck',
+        capacity: 190,
+        capGroup: '140-225',
+        cca: 1150,
+        dimensions: '513×223×223 мм',
+        standard: 'Европа (DIN)',
+        polarity: 'Прямая [+ -]',
+        warranty: '12 мес.',
+        price: 15800,
+        carTags: [],
+        fitment: 'MAN, Volvo FH, DAF, КамАЗ, HOWO, спецтехника',
+        visual: { body: '#1E293B', lid: '#15803D', stripe: '#22C55E', text: '#FFFFFF', sub: '#BBF7D0' }
+      },
+      {
+        id: 10,
+        sku: 'PLT-AGM-070',
+        brand: 'Platin',
+        name: 'PLATIN AGM Start-Stop 70 А·ч',
+        category: 'gel',
+        capacity: 70,
+        capGroup: '61-77',
+        cca: 760,
+        dimensions: '278×175×190 мм',
+        standard: 'Европа (DIN)',
+        polarity: 'Обратная [- +]',
+        warranty: '24 мес.',
+        price: 12400,
+        carTags: ['euro', 'camry'],
+        fitment: 'Автомобили с системой Start-Stop, гибриды, AGM-замена',
+        visual: { body: '#CBD5E1', lid: '#1E3A8A', stripe: '#D97706', text: '#FFFFFF', sub: '#FDE68A' }
+      },
+      {
+        id: 11,
+        sku: 'ATK-055-NEX',
+        brand: 'Ataka',
+        name: 'ATAKA Standard 55 А·ч',
+        category: 'car',
+        capacity: 55,
+        capGroup: '45-60',
+        cca: 480,
+        dimensions: '242×175×190 мм',
+        standard: 'Европа (DIN)',
+        polarity: 'Прямая [+ -]',
+        warranty: '12 мес.',
+        price: 5100,
+        carTags: ['daewoo'],
+        fitment: 'Daewoo Nexia, Lacetti, Chevrolet Spark, ВАЗ / Lada',
+        visual: { body: '#1F2937', lid: '#B91C1C', stripe: '#EF4444', text: '#FFFFFF', sub: '#FEE2E2' }
+      },
+      {
+        id: 12,
+        sku: 'BLK-GEL-100',
+        brand: 'Bolk',
+        name: 'BOLK GEL Deep Cycle 100 А·ч (для UPS)',
+        category: 'gel',
+        capacity: 100,
+        capGroup: '78-110',
+        cca: 0,
+        dimensions: '330×171×215 мм',
+        standard: 'Универсальный',
+        polarity: 'Прямая [+ -]',
+        warranty: '12 мес.',
+        price: 13900,
+        carTags: [],
+        fitment: 'Источники бесперебойного питания (UPS / ИБП), газовые котлы',
+        visual: { body: '#374151', lid: '#0F172A', stripe: '#0EA5E9', text: '#FFFFFF', sub: '#BAE6FD' }
+      },
+      {
+        id: 13,
+        sku: 'CBT-MOTO-09',
+        brand: 'Cobat',
+        name: 'COBAT Moto AGM 12V 9 А·ч',
+        category: 'moto',
+        capacity: 9,
+        capGroup: 'all',
+        cca: 135,
+        dimensions: '150×87×105 мм',
+        standard: 'Мото / Скутер',
+        polarity: 'Прямая [+ -]',
+        warranty: '12 мес.',
+        price: 2950,
+        carTags: [],
+        fitment: 'Мотоциклы, макси-скутеры, квадроциклы, бензогенераторы',
+        visual: { body: '#1E293B', lid: '#0047AB', stripe: '#EAB308', text: '#FFFFFF', sub: '#FEF08A' }
+      },
+      {
+        id: 14,
+        sku: 'ACC-TRM-500',
+        brand: 'Bosch',
+        name: 'Латунные клеммы (+/-) + провода прикуривания 500А',
+        category: 'acc',
+        capacity: 0,
+        capGroup: 'all',
+        cca: 500,
+        dimensions: 'Длина 3.0 м',
+        standard: 'Европа / Азия',
+        polarity: 'Комплект + и −',
+        warranty: '12 мес.',
+        price: 1650,
+        carTags: ['camry', 'fit', 'kia', 'euro', 'suv', 'daewoo'],
+        fitment: 'Подходит для всех легковых и грузовых автомобилей 12V/24V',
+        visual: { body: '#78350F', lid: '#B45309', stripe: '#F59E0B', text: '#FFFFFF', sub: '#FEF3C7' }
       }
-    };
+    ];
 
-    let activeNodeKey = 'battery';
-    let selectedModel = 'Toyota Prius (20 / 30 / 50)';
-    let selectedTime = 'Сегодня';
-    let callbackSavedData = null;
-    let noticeTimer = null;
+    const ALL_BRANDS = [
+      'Bosch', 'Varta', 'Exide', 'Gigawatt', 'Akom', 'Bost',
+      'Reactor', 'Gladiator', 'Tenax', 'Platin', 'Ataka', 'Bolk', 'Cobat'
+    ];
 
-    // Переключение узла на технической схеме
-    function selectSchematicNode(key) {
-      activeNodeKey = key;
-      const data = SCHEMATIC_NODES[key];
-      if (!data) return;
+    let selectedBrand = 'all';
+    let selectedCarTag = null;
+    let searchQuery = '';
+    let tradeInDiscount = 800;
+    let useTradeInOnCatalog = true;
+    let catalogView = 'cards';
+    let modalState = { product: null, discount: 0, netPrice: 0, delivery: 'Доставка по Бишкеку' };
 
-      document.getElementById('schematic-code').textContent = `Узел ${data.num}`;
-      document.getElementById('node-title').textContent = data.title;
-      document.getElementById('node-symptoms').textContent = data.symptoms;
-      document.getElementById('node-check').textContent = data.check;
-
-      // Обновляем подсветку кнопок под схемой
-      ['battery', 'inverter', 'pump', 'engine'].forEach(k => {
-        const btn = document.getElementById(`node-btn-${k}`);
-        const numSpan = btn.querySelector('span');
-        if (k === key) {
-          btn.className = 'p-2.5 text-left text-xs font-bold bg-[#FDF3EE] text-[#E05A1B] transition';
-          numSpan.className = 'font-mono block text-[11px] text-[#E05A1B]';
-        } else {
-          btn.className = 'p-2.5 text-left text-xs font-medium bg-white hover:bg-[#F5F5F3] text-[#1D2025] transition';
-          numSpan.className = 'font-mono block text-[11px] text-[#595D66]';
-        }
-      });
-
-      // Подсветка активного узла внутри векторного чертежа
-      updateSvgHighlight(key);
+    function formatSom(num) {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' сом';
     }
 
-    function updateSvgHighlight(activeKey) {
-      // 1. Батарея
-      const batGroup = document.getElementById('svg-node-battery');
-      const batMain = batGroup.querySelector('rect');
-      const batCircle = batGroup.querySelector('circle');
-      const batLine = batGroup.querySelector('line');
-      if (activeKey === 'battery') {
-        batMain.setAttribute('fill', '#FDF3EE');
-        batMain.setAttribute('stroke', '#E05A1B');
-        batMain.setAttribute('stroke-width', '2.2');
-        batCircle.setAttribute('fill', '#E05A1B');
-        batLine.setAttribute('stroke', '#E05A1B');
-      } else {
-        batMain.setAttribute('fill', '#ECEBE6');
-        batMain.setAttribute('stroke', '#1D2025');
-        batMain.setAttribute('stroke-width', '1.6');
-        batCircle.setAttribute('fill', '#1D2025');
-        batLine.setAttribute('stroke', '#1D2025');
+    // Детальная техническая SVG-иллюстрация корпуса АКБ с учётом бренда и реальной полярности
+    function renderBatteryIllustration(p) {
+      if (p.category === 'acc') {
+        return `
+          <svg viewBox="0 0 180 96" class="w-40 h-22 mx-auto" fill="none" aria-hidden="true">
+            <!-- Провода прикуривания + латунные клеммы -->
+            <path d="M26 68 C45 26, 75 26, 94 68" stroke="#DC2626" stroke-width="5" stroke-linecap="round"/>
+            <path d="M40 72 C62 34, 92 34, 114 72" stroke="#1F2937" stroke-width="5" stroke-linecap="round"/>
+            <rect x="122" y="24" width="42" height="22" rx="3" fill="#D97706"/>
+            <circle cx="133" cy="35" r="5" fill="#FEF3C7"/>
+            <text x="152" y="39" text-anchor="middle" fill="#FFFFFF" font-size="11" font-weight="800" font-family="JetBrains Mono">+</text>
+            <rect x="122" y="52" width="42" height="22" rx="3" fill="#4B5563"/>
+            <circle cx="133" cy="63" r="5" fill="#F3F4F6"/>
+            <text x="152" y="67" text-anchor="middle" fill="#FFFFFF" font-size="11" font-weight="800" font-family="JetBrains Mono">−</text>
+          </svg>
+        `;
       }
 
-      // 2. Инвертор
-      const invGroup = document.getElementById('svg-node-inverter');
-      const invRect = invGroup.querySelector('rect');
-      const invCircle = invGroup.querySelector('circle');
-      const invLine = invGroup.querySelectorAll('line')[2];
-      if (activeKey === 'inverter') {
-        invRect.setAttribute('fill', '#FDF3EE');
-        invRect.setAttribute('stroke', '#E05A1B');
-        invRect.setAttribute('stroke-width', '2.2');
-        invCircle.setAttribute('fill', '#E05A1B');
-        invLine.setAttribute('stroke', '#E05A1B');
-      } else {
-        invRect.setAttribute('fill', '#ECEBE6');
-        invRect.setAttribute('stroke', '#1D2025');
-        invRect.setAttribute('stroke-width', '1.6');
-        invCircle.setAttribute('fill', '#1D2025');
-        invLine.setAttribute('stroke', '#1D2025');
-      }
+      const isReverse = p.polarity.includes('[- +]');
+      const leftPostColor = isReverse ? '#374151' : '#DC2626';
+      const rightPostColor = isReverse ? '#DC2626' : '#374151';
+      const leftCapColor = isReverse ? '#111827' : '#EF4444';
+      const rightCapColor = isReverse ? '#EF4444' : '#111827';
+      const leftSign = isReverse ? '−' : '+';
+      const rightSign = isReverse ? '+' : '−';
+      const v = p.visual;
 
-      // 3. Помпа
-      const pumpGroup = document.getElementById('svg-node-pump');
-      const pumpBody = pumpGroup.querySelectorAll('circle')[0];
-      const pumpMarker = pumpGroup.querySelectorAll('circle')[1];
-      if (activeKey === 'pump') {
-        pumpBody.setAttribute('fill', '#FDF3EE');
-        pumpBody.setAttribute('stroke', '#E05A1B');
-        pumpBody.setAttribute('stroke-width', '2.2');
-        pumpMarker.setAttribute('fill', '#E05A1B');
-      } else {
-        pumpBody.setAttribute('fill', '#ECEBE6');
-        pumpBody.setAttribute('stroke', '#1D2025');
-        pumpBody.setAttribute('stroke-width', '1.6');
-        pumpMarker.setAttribute('fill', '#1D2025');
-      }
+      return `
+        <svg viewBox="0 0 180 96" class="w-40 h-22 mx-auto" fill="none" aria-hidden="true">
+          <!-- Углублённые колодцы и свинцовые клеммы -->
+          <rect x="28" y="10" width="14" height="10" rx="1.5" fill="${leftPostColor}"/>
+          <rect x="26" y="8" width="18" height="3.5" rx="1" fill="${leftCapColor}"/>
 
-      // 4. Двигатель и передача
-      const engGroup = document.getElementById('svg-node-engine');
-      const engRect = engGroup.querySelector('rect');
-      const engMarker = engGroup.querySelectorAll('circle')[2];
-      if (activeKey === 'engine') {
-        engRect.setAttribute('fill', '#FDF3EE');
-        engRect.setAttribute('stroke', '#E05A1B');
-        engRect.setAttribute('stroke-width', '2.2');
-        engMarker.setAttribute('fill', '#E05A1B');
-      } else {
-        engRect.setAttribute('fill', '#ECEBE6');
-        engRect.setAttribute('stroke', '#1D2025');
-        engRect.setAttribute('stroke-width', '1.6');
-        engMarker.setAttribute('fill', '#1D2025');
-      }
+          <rect x="138" y="10" width="14" height="10" rx="1.5" fill="${rightPostColor}"/>
+          <rect x="136" y="8" width="18" height="3.5" rx="1" fill="${rightCapColor}"/>
+
+          <!-- Складная ручка для переноски -->
+          <path d="M62 18 L66 11 L114 11 L118 18" stroke="#4B5563" stroke-width="2.5" stroke-linejoin="round"/>
+
+          <!-- Верхняя крышка с газоотводными пробками -->
+          <rect x="18" y="18" width="144" height="13" rx="2.5" fill="${v.lid}"/>
+          <rect x="52" y="21" width="76" height="4" rx="1" fill="#000000" fill-opacity="0.22"/>
+
+          <!-- Основной моноблок корпуса -->
+          <rect x="20" y="30" width="140" height="54" rx="3" fill="${v.body}"/>
+          <!-- Вертикальные рёбра жёсткости -->
+          <rect x="26" y="34" width="3" height="46" rx="1" fill="#000000" fill-opacity="0.12"/>
+          <rect x="151" y="34" width="3" height="46" rx="1" fill="#000000" fill-opacity="0.12"/>
+
+          <!-- Нижний крепёжный бортик B13 -->
+          <rect x="15" y="83" width="150" height="5" rx="1.5" fill="${v.lid}"/>
+
+          <!-- Фирменная этикетка -->
+          <rect x="35" y="38" width="110" height="38" rx="2" fill="#121417" fill-opacity="0.82"/>
+          <rect x="35" y="38" width="110" height="4.5" rx="1" fill="${v.stripe}"/>
+
+          <text x="90" y="54" text-anchor="middle" fill="${v.text}" font-size="11" font-weight="800" font-family="Golos Text, sans-serif" letter-spacing="0.6">${p.brand.toUpperCase()}</text>
+          <text x="90" y="68" text-anchor="middle" fill="${v.sub}" font-size="9.5" font-weight="700" font-family="JetBrains Mono, monospace">${p.capacity} Ah • ${p.cca > 0 ? p.cca + 'A' : 'GEL'}</text>
+
+          <!-- Маркировка полярности на крышке -->
+          <text x="35" y="28" text-anchor="middle" fill="#FFFFFF" font-size="10" font-weight="800" font-family="JetBrains Mono">${leftSign}</text>
+          <text x="145" y="28" text-anchor="middle" fill="#FFFFFF" font-size="10" font-weight="800" font-family="JetBrains Mono">${rightSign}</text>
+        </svg>
+      `;
     }
 
-    // Переход со схемы узла сразу к форме с подстановкой симптома
-    function bookSelectedNode() {
-      const node = SCHEMATIC_NODES[activeNodeKey];
-      if (node && node.defaultSymptom) {
-        quickBookWork(node.defaultSymptom);
-      } else {
-        document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
-      }
-    }
+    function buildBrandStrip() {
+      const strip = document.getElementById('brand-strip');
+      const total = PRODUCTS.length;
 
-    // Быстрая запись из списка работ
-    function quickBookWork(symptomValue) {
-      switchBookingTab('messenger');
-      document.querySelectorAll('.symptom-checkbox').forEach(cb => {
-        cb.checked = (cb.value === symptomValue);
-      });
-      updateOrderPreview();
-      document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    // Переключение значков приборной панели
-    function selectDashboardSign(key) {
-      const info = DASHBOARD_SIGNS[key];
-      if (!info) return;
-
-      document.getElementById('dash-detail-title').textContent = info.title;
-      document.getElementById('dash-detail-desc').textContent = info.desc;
-      document.getElementById('dash-detail-advice').textContent = info.advice;
-
-      ['triangle', 'engine', 'battery', 'brake'].forEach(k => {
-        const btn = document.getElementById(`dash-btn-${k}`);
-        const iconBox = btn.querySelector('div');
-        const label = btn.querySelectorAll('div')[2];
-        if (k === key) {
-          btn.className = 'p-4 sm:p-5 text-left bg-[#262A31] transition flex flex-col justify-between gap-3';
-          iconBox.className = 'w-12 h-12 rounded bg-[#15171B] border border-[#E05A1B] flex items-center justify-center';
-          label.className = 'text-xs sm:text-sm font-bold text-white';
-        } else {
-          btn.className = 'p-4 sm:p-5 text-left bg-[#1D2025] hover:bg-[#24282F] transition flex flex-col justify-between gap-3';
-          iconBox.className = 'w-12 h-12 rounded bg-[#15171B] border border-[#32363F] flex items-center justify-center';
-          label.className = 'text-xs sm:text-sm font-bold text-gray-200';
-        }
-      });
-    }
-
-    // Переключение вкладок формы записи
-    function switchBookingTab(tab) {
-      const panelMsg = document.getElementById('booking-panel-messenger');
-      const panelCb = document.getElementById('booking-panel-callback');
-      const tabMsg = document.getElementById('tab-messenger');
-      const tabCb = document.getElementById('tab-callback');
-
-      if (tab === 'messenger') {
-        panelMsg.classList.remove('hidden');
-        panelCb.classList.add('hidden');
-        tabMsg.className = 'px-3.5 py-2 rounded text-xs sm:text-sm font-bold bg-[#1D2025] text-white transition';
-        tabCb.className = 'px-3.5 py-2 rounded text-xs sm:text-sm font-medium text-[#1D2025] hover:bg-[#F5F5F3] transition';
-      } else {
-        panelMsg.classList.add('hidden');
-        panelCb.classList.remove('hidden');
-        tabCb.className = 'px-3.5 py-2 rounded text-xs sm:text-sm font-bold bg-[#1D2025] text-white transition';
-        tabMsg.className = 'px-3.5 py-2 rounded text-xs sm:text-sm font-medium text-[#1D2025] hover:bg-[#F5F5F3] transition';
-      }
-    }
-
-    // Выбор модели автомобиля
-    function selectCarModel(btn) {
-      selectedModel = btn.dataset.model;
-      document.querySelectorAll('.model-btn').forEach(b => {
-        if (b === btn) {
-          b.className = 'model-btn px-3 py-1.5 rounded border border-[#1D2025] bg-[#1D2025] text-white text-xs sm:text-sm font-medium transition';
-        } else {
-          b.className = 'model-btn px-3 py-1.5 rounded border border-[#D6D5D0] bg-white hover:border-[#1D2025] text-[#1D2025] text-xs sm:text-sm transition';
-        }
-      });
-
-      const otherWrap = document.getElementById('other-model-wrap');
-      if (selectedModel === 'Другая модель') {
-        otherWrap.classList.remove('hidden');
-        document.getElementById('other-model-input').focus();
-      } else {
-        otherWrap.classList.add('hidden');
-      }
-
-      updateOrderPreview();
-    }
-
-    // Выбор времени визита
-    function selectVisitTime(btn) {
-      selectedTime = btn.dataset.time;
-      document.querySelectorAll('.time-btn').forEach(b => {
-        if (b === btn) {
-          b.className = 'time-btn h-10 px-2 rounded border border-[#1D2025] bg-[#1D2025] text-white text-xs sm:text-sm font-medium transition';
-        } else {
-          b.className = 'time-btn h-10 px-2 rounded border border-[#D6D5D0] bg-white hover:border-[#1D2025] text-[#1D2025] text-xs sm:text-sm transition';
-        }
-      });
-      updateOrderPreview();
-    }
-
-    // Формирование текста заявки для мессенджера
-    function buildBookingMessage() {
-      let modelText = selectedModel;
-      if (selectedModel === 'Другая модель') {
-        const custom = document.getElementById('other-model-input').value.trim();
-        modelText = custom ? custom : 'Другая гибридная модель';
-      }
-
-      const symptoms = Array.from(document.querySelectorAll('.symptom-checkbox:checked'))
-        .map(cb => cb.value);
-
-      const comment = document.getElementById('diagnostic-comment').value.trim();
-
-      const lines = [
-        'Здравствуйте! Запись на диагностику в Hybrid Doctor (Бишкек):',
-        `• Автомобиль: ${modelText}`
+      const chips = [
+        `<button type="button" onclick="selectBrand('all')" data-brand="all"
+                 class="brand-chip shrink-0 h-8 px-3 rounded-md text-xs font-bold border transition ${selectedBrand === 'all' ? 'bg-cobalt-600 text-white border-cobalt-600' : 'bg-[#F4F5F7] text-asphalt border-[#DCE0E6] hover:border-cobalt-600'}">
+          Все бренды <span class="font-mono opacity-80 ml-1">${total}</span>
+        </button>`
       ];
 
-      if (symptoms.length > 0) {
-        lines.push('• Симптомы:');
-        symptoms.forEach(s => lines.push(`  — ${s}`));
+      ALL_BRANDS.forEach(brand => {
+        const count = PRODUCTS.filter(p => p.brand === brand).length;
+        const isActive = selectedBrand === brand;
+        chips.push(`
+          <button type="button" onclick="selectBrand('${brand}')" data-brand="${brand}"
+                  class="brand-chip shrink-0 h-8 px-3 rounded-md text-xs font-semibold border transition ${isActive ? 'bg-cobalt-600 text-white border-cobalt-600' : 'bg-white text-asphalt border-[#DCE0E6] hover:border-cobalt-600'}">
+            ${brand.toUpperCase()} <span class="font-mono text-[11px] opacity-70 ml-1">${count}</span>
+          </button>
+        `);
+      });
+
+      strip.innerHTML = chips.join('');
+    }
+
+    function switchSelectorTab(tab) {
+      const panelParams = document.getElementById('panel-params');
+      const panelCars = document.getElementById('panel-cars');
+      const tabParams = document.getElementById('tab-params');
+      const tabCars = document.getElementById('tab-cars');
+
+      if (tab === 'params') {
+        panelParams.classList.remove('hidden');
+        panelCars.classList.add('hidden');
+        tabParams.className = 'px-4 py-2 text-xs sm:text-sm font-bold border-b-2 border-cobalt-600 text-cobalt-600 -mb-px transition';
+        tabCars.className = 'px-4 py-2 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-gray-600 hover:text-asphalt -mb-px transition';
       } else {
-        lines.push('• Симптомы: плановая проверка гибридной установки');
+        panelParams.classList.add('hidden');
+        panelCars.classList.remove('hidden');
+        tabCars.className = 'px-4 py-2 text-xs sm:text-sm font-bold border-b-2 border-cobalt-600 text-cobalt-600 -mb-px transition';
+        tabParams.className = 'px-4 py-2 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-gray-600 hover:text-asphalt -mb-px transition';
       }
+    }
 
-      if (comment) {
-        lines.push(`• Комментарий / код ошибки: ${comment}`);
+    function selectBrand(brand) {
+      selectedBrand = brand;
+      buildBrandStrip();
+      applyFilters();
+    }
+
+    function selectCarPreset(label, tag) {
+      selectedCarTag = tag;
+      document.querySelectorAll('.car-chip').forEach(btn => {
+        if (btn.dataset.car === tag) {
+          btn.className = 'car-chip px-3 py-1.5 rounded-md border border-cobalt-600 bg-cobalt-600 text-white text-xs font-bold transition';
+        } else {
+          btn.className = 'car-chip px-3 py-1.5 rounded-md border border-[#DCE0E6] bg-white hover:border-cobalt-600 text-xs font-semibold text-asphalt transition';
+        }
+      });
+
+      const badge = document.getElementById('active-car-badge');
+      document.getElementById('active-car-label').textContent = `Авто: ${label}`;
+      badge.classList.remove('hidden');
+      badge.classList.add('inline-flex');
+
+      applyFilters();
+      document.getElementById('catalog').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function clearCarPreset() {
+      selectedCarTag = null;
+      document.querySelectorAll('.car-chip').forEach(btn => {
+        btn.className = 'car-chip px-3 py-1.5 rounded-md border border-[#DCE0E6] bg-white hover:border-cobalt-600 text-xs font-semibold text-asphalt transition';
+      });
+      const badge = document.getElementById('active-car-badge');
+      badge.classList.add('hidden');
+      badge.classList.remove('inline-flex');
+      applyFilters();
+    }
+
+    function syncSearch(val) {
+      searchQuery = (val || '').trim().toLowerCase();
+      const hInput = document.getElementById('header-search');
+      const mInput = document.getElementById('mobile-search');
+      const clearBtn = document.getElementById('clear-search-btn');
+      if (hInput && hInput.value !== val) hInput.value = val;
+      if (mInput && mInput.value !== val) mInput.value = val;
+      if (clearBtn) {
+        clearBtn.classList.toggle('hidden', !searchQuery);
       }
-
-      lines.push(`• Когда удобно подъехать: ${selectedTime}`);
-      return lines.join('\n');
+      applyFilters();
     }
 
-    function updateOrderPreview() {
-      document.getElementById('booking-preview').textContent = buildBookingMessage();
+    function updateTradeIn() {
+      tradeInDiscount = parseInt(document.getElementById('tradein-select').value, 10) || 0;
+      useTradeInOnCatalog = tradeInDiscount > 0;
+      document.getElementById('toggle-tradein-prices').checked = useTradeInOnCatalog;
+      applyFilters();
     }
 
-    // Копирование текста в буфер обмена без устаревших методов с блокировками
-    function copyStringToClipboard(str) {
-      const el = document.createElement('textarea');
-      el.value = str;
-      el.setAttribute('readonly', '');
-      el.style.position = 'fixed';
-      el.style.left = '-9999px';
-      document.body.appendChild(el);
-      el.select();
-      try {
-        document.execCommand('copy');
-      } catch (e) {
-        // Игнорируем ограничения окружения
+    function toggleTradeInPrices() {
+      useTradeInOnCatalog = document.getElementById('toggle-tradein-prices').checked;
+      if (useTradeInOnCatalog && tradeInDiscount === 0) {
+        tradeInDiscount = 800;
+        document.getElementById('tradein-select').value = '800';
       }
-      document.body.removeChild(el);
+      applyFilters();
     }
 
-    function showCopyNotice(title, subtitle) {
-      const box = document.getElementById('copy-notice');
-      document.getElementById('copy-notice-title').textContent = title;
-      document.getElementById('copy-notice-text').textContent = subtitle;
-      box.classList.remove('hidden');
+    function setCatalogView(view) {
+      catalogView = view;
+      const cardsBtn = document.getElementById('view-cards-btn');
+      const tableBtn = document.getElementById('view-table-btn');
+      const grid = document.getElementById('products-grid');
+      const tableWrap = document.getElementById('products-table-wrap');
 
-      if (noticeTimer) clearTimeout(noticeTimer);
-      noticeTimer = setTimeout(() => {
-        box.classList.add('hidden');
-      }, 4500);
+      if (view === 'cards') {
+        cardsBtn.className = 'px-3 py-1.5 rounded text-xs font-bold bg-cobalt-600 text-white transition';
+        tableBtn.className = 'px-3 py-1.5 rounded text-xs font-semibold text-gray-600 hover:text-asphalt transition';
+        grid.classList.remove('hidden');
+        tableWrap.classList.add('hidden');
+      } else {
+        tableBtn.className = 'px-3 py-1.5 rounded text-xs font-bold bg-cobalt-600 text-white transition';
+        cardsBtn.className = 'px-3 py-1.5 rounded text-xs font-semibold text-gray-600 hover:text-asphalt transition';
+        grid.classList.add('hidden');
+        tableWrap.classList.remove('hidden');
+      }
+      applyFilters();
     }
 
-    function copyBookingText() {
-      copyStringToClipboard(buildBookingMessage());
-      showCopyNotice('Текст заявки скопирован', 'Теперь вы можете вставить его в любой удобный мессенджер.');
+    function resetFilters() {
+      document.getElementById('filter-category').value = 'all';
+      document.getElementById('filter-standard').value = 'all';
+      document.getElementById('filter-capacity').value = 'all';
+      document.getElementById('filter-polarity').value = 'all';
+      selectedBrand = 'all';
+      clearCarPreset();
+      syncSearch('');
+      buildBrandStrip();
+      applyFilters();
     }
 
-    function sendWhatsAppBooking() {
-      const msg = buildBookingMessage();
-      window.open(`https://wa.me/996999515398?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+    function getDiscountForProduct(p) {
+      if (!useTradeInOnCatalog || tradeInDiscount <= 0) return 0;
+      if (p.category === 'acc' || p.category === 'moto') return 0;
+      if (p.category === 'truck') return Math.max(tradeInDiscount, 1500);
+      return Math.min(tradeInDiscount, Math.floor(p.price * 0.35));
     }
 
-    function sendTelegramBooking() {
-      const msg = buildBookingMessage();
-      copyStringToClipboard(msg);
-      showCopyNotice('Текст заявки скопирован', 'Вставьте его в открывшемся чате Telegram и нажмите «Отправить».');
-      window.open('https://t.me/+996999515398', '_blank', 'noopener');
+    function applyFilters() {
+      const cat = document.getElementById('filter-category').value;
+      const std = document.getElementById('filter-standard').value;
+      const cap = document.getElementById('filter-capacity').value;
+      const pol = document.getElementById('filter-polarity').value;
+
+      const filtered = PRODUCTS.filter(p => {
+        if (selectedBrand !== 'all' && p.brand !== selectedBrand) return false;
+        if (cat !== 'all' && p.category !== cat) return false;
+        if (std !== 'all' && p.standard !== std) return false;
+        if (cap !== 'all' && p.capGroup !== cap) return false;
+        if (pol !== 'all' && p.polarity !== pol) return false;
+        if (selectedCarTag && !p.carTags.includes(selectedCarTag)) return false;
+        if (searchQuery) {
+          const text = `${p.sku} ${p.name} ${p.brand} ${p.fitment} ${p.capacity} ${p.standard} ${p.polarity}`.toLowerCase();
+          if (!text.includes(searchQuery)) return false;
+        }
+        return true;
+      });
+
+      document.getElementById('match-count').textContent = filtered.length;
+      document.getElementById('visible-count').textContent = filtered.length;
+      renderCatalog(filtered);
     }
 
-    // Обработка вкладки обратного звонка
-    function submitCallbackForm() {
-      const name = document.getElementById('cb-name').value.trim() || 'Не указано';
-      const phone = document.getElementById('cb-phone').value.trim();
-      const car = document.getElementById('cb-car').value.trim();
-      const errEl = document.getElementById('cb-error');
+    function renderCatalog(list) {
+      const grid = document.getElementById('products-grid');
+      const tableWrap = document.getElementById('products-table-wrap');
+      const tbody = document.getElementById('products-table-body');
+      const empty = document.getElementById('empty-state');
 
-      if (!phone || phone.replace(/\D/g, '').length < 6) {
-        errEl.classList.remove('hidden');
-        document.getElementById('cb-phone').focus();
+      if (!list.length) {
+        grid.innerHTML = '';
+        tbody.innerHTML = '';
+        grid.classList.add('hidden');
+        tableWrap.classList.add('hidden');
+        empty.classList.remove('hidden');
         return;
       }
 
-      errEl.classList.add('hidden');
-      callbackSavedData = { name, phone, car };
+      empty.classList.add('hidden');
+      if (catalogView === 'cards') {
+        grid.classList.remove('hidden');
+        tableWrap.classList.add('hidden');
+      } else {
+        grid.classList.add('hidden');
+        tableWrap.classList.remove('hidden');
+      }
 
-      const ticketNum = Math.floor(100 + Math.random() * 899);
-      document.getElementById('cb-ticket-id').textContent = `Обращение № ${ticketNum}`;
-      document.getElementById('cb-success-summary').textContent =
-        `Имя: ${name}. Телефон для связи: ${phone}${car ? '. Автомобиль / вопрос: ' + car : ''}. Мастер перезвонит в рабочее время (Пн–Сб: 09:00 – 19:00).`;
+      // Отрисовка карточек
+      grid.innerHTML = list.map(p => {
+        const discount = getDiscountForProduct(p);
+        const netPrice = Math.max(500, p.price - discount);
 
-      document.getElementById('callback-form-wrap').classList.add('hidden');
-      document.getElementById('callback-success-wrap').classList.remove('hidden');
+        return `
+          <article class="bg-white border border-[#DCE0E6] hover:border-cobalt-600 rounded-lg p-4 flex flex-col justify-between transition">
+            <div>
+              <!-- Верхняя строка: артикул и наличие -->
+              <div class="flex items-center justify-between gap-2 text-[11px] mb-2">
+                <span class="font-mono text-gray-400">${p.sku}</span>
+                <span class="font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">В наличии</span>
+              </div>
+
+              <!-- Техническая иллюстрация АКБ -->
+              <div class="bg-[#F4F5F7] border border-[#DCE0E6]/70 rounded-md py-3 px-2 mb-3">
+                ${renderBatteryIllustration(p)}
+              </div>
+
+              <!-- Название и применяемость -->
+              <h3 class="text-sm sm:text-[15px] font-bold text-asphalt leading-snug">${p.name}</h3>
+              <p class="text-xs text-gray-500 mt-1 line-clamp-2">${p.fitment}</p>
+
+              <!-- Таблица характеристик -->
+              <dl class="mt-3 pt-2.5 border-t border-[#DCE0E6] space-y-1 text-xs">
+                ${p.capacity > 0 ? `
+                  <div class="flex justify-between">
+                    <dt class="text-gray-500">Ёмкость / Ток:</dt>
+                    <dd class="font-mono font-semibold text-asphalt tabular-nums">${p.capacity} А·ч / ${p.cca} A</dd>
+                  </div>
+                ` : ''}
+                <div class="flex justify-between">
+                  <dt class="text-gray-500">Стандарт:</dt>
+                  <dd class="font-medium text-asphalt">${p.standard}</dd>
+                </div>
+                <div class="flex justify-between">
+                  <dt class="text-gray-500">Полярность:</dt>
+                  <dd class="font-mono font-medium text-asphalt">${p.polarity}</dd>
+                </div>
+                <div class="flex justify-between">
+                  <dt class="text-gray-500">Габариты:</dt>
+                  <dd class="font-mono text-gray-700 tabular-nums">${p.dimensions}</dd>
+                </div>
+                <div class="flex justify-between">
+                  <dt class="text-gray-500">Гарантия:</dt>
+                  <dd class="font-mono font-medium text-asphalt">${p.warranty}</dd>
+                </div>
+              </dl>
+            </div>
+
+            <!-- Блок цены и кнопка заказа -->
+            <div class="mt-4 pt-3 border-t border-[#DCE0E6]">
+              ${discount > 0 ? `
+                <div class="flex items-center gap-2 text-xs">
+                  <span class="font-mono text-gray-400 line-through tabular-nums">${formatSom(p.price)}</span>
+                  <span class="font-mono font-bold text-amber-800 bg-amber-100 px-1.5 py-0.5 rounded">−${formatSom(discount)}</span>
+                </div>
+                <div class="font-mono text-lg font-extrabold text-asphalt mt-0.5 tabular-nums">${formatSom(netPrice)}</div>
+              ` : `
+                <div class="text-[11px] text-gray-400">Цена без сдачи старого АКБ</div>
+                <div class="font-mono text-lg font-extrabold text-asphalt mt-0.5 tabular-nums">${formatSom(p.price)}</div>
+              `}
+
+              <button type="button" onclick="openOrderModal(${p.id})"
+                      class="mt-2.5 w-full h-9 rounded-md bg-cobalt-600 hover:bg-cobalt-700 text-white text-xs sm:text-sm font-semibold transition">
+                Заказать
+              </button>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      // Отрисовка компактного прайс-листа
+      tbody.innerHTML = list.map(p => {
+        const discount = getDiscountForProduct(p);
+        const netPrice = Math.max(500, p.price - discount);
+
+        return `
+          <tr class="hover:bg-cobalt-50/40 transition">
+            <td class="py-3 px-4">
+              <div class="font-mono text-[11px] text-gray-400">${p.sku}</div>
+              <div class="font-bold text-asphalt">${p.name}</div>
+              <div class="text-[11px] text-gray-500 mt-0.5">${p.fitment}</div>
+            </td>
+            <td class="py-3 px-3 font-semibold text-asphalt whitespace-nowrap">${p.brand}</td>
+            <td class="py-3 px-3 whitespace-nowrap">
+              <div class="text-asphalt font-medium">${p.standard}</div>
+              <div class="font-mono text-[11px] text-gray-500 tabular-nums">${p.dimensions}</div>
+            </td>
+            <td class="py-3 px-3 font-mono whitespace-nowrap tabular-nums">
+              ${p.capacity > 0 ? `<span class="font-bold text-asphalt">${p.capacity} А·ч</span> / ${p.cca} A` : 'Комплект'}
+            </td>
+            <td class="py-3 px-3 font-mono text-xs whitespace-nowrap">${p.polarity}</td>
+            <td class="py-3 px-3 font-mono text-xs whitespace-nowrap">${p.warranty}</td>
+            <td class="py-3 px-4 text-right whitespace-nowrap">
+              ${discount > 0 ? `
+                <div class="font-mono text-[11px] text-gray-400 line-through tabular-nums">${formatSom(p.price)}</div>
+                <div class="font-mono font-extrabold text-asphalt tabular-nums">${formatSom(netPrice)}</div>
+              ` : `
+                <div class="font-mono font-extrabold text-asphalt tabular-nums">${formatSom(p.price)}</div>
+              `}
+            </td>
+            <td class="py-3 px-4 text-right whitespace-nowrap">
+              <button type="button" onclick="openOrderModal(${p.id})"
+                      class="h-8 px-3.5 rounded-md bg-cobalt-600 hover:bg-cobalt-700 text-white text-xs font-semibold transition">
+                Заказать
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
     }
 
-    function duplicateCallbackToWhatsApp() {
-      if (!callbackSavedData) return;
-      const lines = [
-        'Здравствуйте! Прошу перезвонить по диагностике гибрида (Hybrid Doctor, Бишкек):',
-        `• Имя: ${callbackSavedData.name}`,
-        `• Телефон: ${callbackSavedData.phone}`,
-        callbackSavedData.car ? `• Автомобиль / вопрос: ${callbackSavedData.car}` : ''
+    // Модальное окно заказа
+    function openOrderModal(productId) {
+      const p = PRODUCTS.find(item => item.id === productId);
+      if (!p) return;
+
+      const discount = getDiscountForProduct(p);
+      const netPrice = Math.max(500, p.price - discount);
+      modalState = { product: p, discount, netPrice, delivery: 'Доставка по Бишкеку' };
+
+      document.getElementById('modal-sku').textContent = `АРТ. ${p.sku}`;
+      document.getElementById('modal-title').textContent = p.name;
+      document.getElementById('modal-specs').textContent = `${p.standard} • ${p.polarity} • ${p.dimensions} • Гарантия ${p.warranty}`;
+      document.getElementById('modal-base-price').textContent = formatSom(p.price);
+
+      const discRow = document.getElementById('modal-discount-row');
+      if (discount > 0) {
+        discRow.classList.remove('hidden');
+        document.getElementById('modal-discount-val').textContent = `−${formatSom(discount)}`;
+      } else {
+        discRow.classList.add('hidden');
+      }
+
+      document.getElementById('modal-net-price').textContent = formatSom(netPrice);
+      setDeliveryMethod('Доставка по Бишкеку');
+
+      document.getElementById('modal-step-form').classList.remove('hidden');
+      document.getElementById('modal-step-done').classList.add('hidden');
+
+      const modal = document.getElementById('order-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function setDeliveryMethod(method) {
+      modalState.delivery = method;
+      const courierBtn = document.getElementById('delivery-type-courier');
+      const pickupBtn = document.getElementById('delivery-type-pickup');
+      const addrWrap = document.getElementById('address-field-wrap');
+
+      if (method === 'Доставка по Бишкеку') {
+        courierBtn.className = 'h-9 rounded-md border border-cobalt-600 bg-cobalt-50 text-cobalt-700 text-xs font-bold transition';
+        pickupBtn.className = 'h-9 rounded-md border border-[#DCE0E6] bg-white text-gray-700 text-xs font-semibold transition';
+        addrWrap.classList.remove('hidden');
+      } else {
+        pickupBtn.className = 'h-9 rounded-md border border-cobalt-600 bg-cobalt-50 text-cobalt-700 text-xs font-bold transition';
+        courierBtn.className = 'h-9 rounded-md border border-[#DCE0E6] bg-white text-gray-700 text-xs font-semibold transition';
+        addrWrap.classList.add('hidden');
+      }
+    }
+
+    function closeOrderModal() {
+      const modal = document.getElementById('order-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function closeModalBackdrop(e) {
+      if (e.target.id === 'order-modal') closeOrderModal();
+    }
+
+    function submitDemoOrder() {
+      if (!modalState.product) return;
+      const addr = document.getElementById('modal-address').value.trim();
+      const phone = document.getElementById('modal-phone').value.trim() || 'указан при звонке';
+      const pay = document.getElementById('modal-pay').value;
+      const orderNum = 'AKB-' + Math.floor(100 + Math.random() * 899);
+
+      document.getElementById('order-number-badge').textContent = `ЗАКАЗ #${orderNum}`;
+      document.getElementById('modal-done-summary').textContent =
+        `Позиция: ${modalState.product.name} (${formatSom(modalState.netPrice)}). Получение: ${modalState.delivery}${addr && modalState.delivery === 'Доставка по Бишкеку' ? ' (' + addr + ')' : ''}. Оплата: ${pay}. Телефон: ${phone}. Менеджер перезвонит в рабочее время (09:00–18:00).`;
+
+      document.getElementById('modal-step-form').classList.add('hidden');
+      document.getElementById('modal-step-done').classList.remove('hidden');
+    }
+
+    function submitWhatsAppOrder() {
+      if (!modalState.product) return;
+      const addr = document.getElementById('modal-address').value.trim();
+      const phone = document.getElementById('modal-phone').value.trim();
+      const pay = document.getElementById('modal-pay').value;
+
+      const msg = [
+        'Здравствуйте! Заказ с сайта «АВТО АКБ» (Бишкек):',
+        `• Товар: ${modalState.product.name} (${modalState.product.sku})`,
+        `• Параметры: ${modalState.product.standard}, ${modalState.product.polarity}`,
+        modalState.discount > 0
+          ? `• Сдача старого АКБ: да (скидка −${formatSom(modalState.discount)})`
+          : '• Сдача старого АКБ: нет',
+        `• Итого к оплате: ${formatSom(modalState.netPrice)}`,
+        `• Получение: ${modalState.delivery}${addr && modalState.delivery === 'Доставка по Бишкеку' ? ' — ' + addr : ''}`,
+        `• Оплата: ${pay}`,
+        phone ? `• Телефон: ${phone}` : ''
       ].filter(Boolean).join('\n');
 
-      window.open(`https://wa.me/996999515398?text=${encodeURIComponent(lines)}`, '_blank', 'noopener');
+      window.open(`https://wa.me/996556157110?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
     }
 
-    function resetCallbackForm() {
-      document.getElementById('callback-form-wrap').classList.remove('hidden');
-      document.getElementById('callback-success-wrap').classList.add('hidden');
+    function sendCustomCarWhatsApp() {
+      const car = document.getElementById('custom-car-input').value.trim() || 'не указан';
+      const msg = [
+        'Здравствуйте! Подберите аккумулятор для авто (г. Бишкек):',
+        `• Автомобиль: ${car}`,
+        tradeInDiscount > 0 ? `• Планирую сдать старый АКБ` : ''
+      ].filter(Boolean).join('\n');
+      window.open(`https://wa.me/996556157110?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
     }
 
-    // Первичная отрисовка текста предпросмотра
-    updateOrderPreview();
+    // Калькулятор приёма Б/У АКБ
+    function calcScrap() {
+      const rate = parseInt(document.getElementById('scrap-rate').value, 10) || 0;
+      const qty = Math.max(1, parseInt(document.getElementById('scrap-qty').value, 10) || 1);
+      document.getElementById('scrap-total').textContent = formatSom(rate * qty);
+    }
+
+    function sendScrapWhatsApp() {
+      const sel = document.getElementById('scrap-rate');
+      const label = sel.options[sel.selectedIndex].text;
+      const qty = Math.max(1, parseInt(document.getElementById('scrap-qty').value, 10) || 1);
+      const total = document.getElementById('scrap-total').textContent;
+      const msg = `Здравствуйте! Хочу сдать Б/У АКБ в Бишкеке:\n• Тип: ${label}\n• Количество: ${qty} шт.\n• Расчёт на сайте: ${total}`;
+      window.open(`https://wa.me/996556157110?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+    }
+
+    // Инициализация страницы
+    buildBrandStrip();
+    applyFilters();
   </script>
 </body>
 </html>
